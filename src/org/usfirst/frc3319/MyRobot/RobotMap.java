@@ -11,6 +11,7 @@
 
 package org.usfirst.frc3319.MyRobot;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.SendableBase;
 import edu.wpi.first.wpilibj.Spark;
@@ -39,6 +40,7 @@ public class RobotMap {
 	public static Solenoid gripDown;
 	public static Compressor compressor;
 	public static SpeedController elevator;
+	public static AnalogInput ultraSonic;
 
     public static void init() {
         
@@ -66,6 +68,9 @@ public class RobotMap {
         driveTrainMecanumDrive.setExpiration(0.1);
         driveTrainMecanumDrive.setMaxOutput(1.0);
         
+        ultraSonic = new AnalogInput(0);
+		((SendableBase) ultraSonic).setName("DriveTrain", "ultraSonic");
+        
         elevator = new Talon (4);
         ((SendableBase) elevator).setName("Elevator" , "elevator");
         elevator.setInverted(false);
@@ -88,5 +93,7 @@ public class RobotMap {
 		gripDown = new Solenoid(3);
 		((SendableBase) gripDown).setName("Gripper", "gripDown");
 		gripDown.set(false);
+		
+		
     }
 }
