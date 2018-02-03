@@ -82,7 +82,7 @@ public class OI {
 
 
         // SmartDashboard Buttons
-        //SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
+        SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
         SmartDashboard.putData("DriveWithJoystick", new DriveWithJoystick());
 		SmartDashboard.putData("CloseGripper", new CloseGripper());
 		SmartDashboard.putData("OpenGripper", new OpenGripper());

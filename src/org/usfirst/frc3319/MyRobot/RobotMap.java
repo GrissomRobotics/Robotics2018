@@ -13,7 +13,12 @@ package org.usfirst.frc3319.MyRobot;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalSource;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SendableBase;
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
@@ -40,7 +45,8 @@ public class RobotMap {
 	public static Solenoid gripDown;
 	public static Compressor compressor;
 	public static SpeedController elevator;
-	public static AnalogInput ultraSonic;
+	public static Encoder elevatorEncoder;
+	public static SerialPort ultraSonic;
 
     public static void init() {
         
@@ -68,12 +74,14 @@ public class RobotMap {
         driveTrainMecanumDrive.setExpiration(0.1);
         driveTrainMecanumDrive.setMaxOutput(1.0);
         
-        ultraSonic = new AnalogInput(0);
-		((SendableBase) ultraSonic).setName("DriveTrain", "ultraSonic");
+        ultraSonic = new SerialPort(9600, SerialPort.Port.kOnboard);
         
         elevator = new Talon (4);
         ((SendableBase) elevator).setName("Elevator" , "elevator");
         elevator.setInverted(false);
+        
+        elevatorEncoder = new Encoder(new DigitalInput(0), new DigitalInput(1));
+        ((SendableBase) elevatorEncoder).setName("Elevator", "elevatorEncoder");
         
         compressor = new Compressor(0);
         compressor.setClosedLoopControl(true);

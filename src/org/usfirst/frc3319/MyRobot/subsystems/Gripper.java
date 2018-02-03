@@ -68,9 +68,5 @@ public class Gripper extends Subsystem {
 	public boolean isClosed() {
 		return (grab.get());
 	}
-
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
-
 }
 
