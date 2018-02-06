@@ -57,6 +57,8 @@ public class OI {
 	public JoystickButton gripperLower;
 	public JoystickButton elevatorLower;
 	public JoystickButton elevatorRaise;
+		
+	private double SWITCH_HEIGHT = 70000;
 
     public OI() {
 
@@ -88,8 +90,11 @@ public class OI {
 		SmartDashboard.putData("OpenGripper", new OpenGripper());
 		SmartDashboard.putData("RaiseGripper", new RaiseGripper());
 		SmartDashboard.putData("LowerGripper", new LowerGripper());
-		SmartDashboard.putData("RaiseElevator", new RaiseElevator());
 		SmartDashboard.putData("LowerGripper", new LowerElevator());
+		SmartDashboard.putData("ZeroEncoders", new ZeroEncoders());
+		SmartDashboard.putData("RaiseSwitchHeight", new SetElevatorSetpoint(SWITCH_HEIGHT));
+		SmartDashboard.putData("LowerToDefaultHeight", new SetElevatorSetpoint(0));
+		
     }
 
     public Joystick getstick() {

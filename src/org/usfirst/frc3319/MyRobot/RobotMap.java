@@ -51,25 +51,25 @@ public class RobotMap {
     public static void init() {
         
         driveTrainLeftFront = new Talon(0);
-        ((SendableBase) driveTrainLeftFront).setName("DriveTrain", "leftFront");
+        //((SendableBase) driveTrainLeftFront).setName("DriveTrain", "leftFront");
         driveTrainLeftFront.setInverted(true);
         
         driveTrainRightFront = new Talon(1);
-        ((SendableBase) driveTrainRightFront).setName("DriveTrain", "rightFront");
+        //((SendableBase) driveTrainRightFront).setName("DriveTrain", "rightFront");
         driveTrainRightFront.setInverted(false);
         
         driveTrainLeftRear = new Talon(2);
-        ((SendableBase) driveTrainLeftRear).setName("DriveTrain", "leftRear");
+        //((SendableBase) driveTrainLeftRear).setName("DriveTrain", "leftRear");
         driveTrainLeftRear.setInverted(true);
         
         driveTrainRightRear = new Talon(3);
-        ((SendableBase) driveTrainRightRear).setName("DriveTrain", "rightRear");
+        //((SendableBase) driveTrainRightRear).setName("DriveTrain", "rightRear");
         driveTrainRightRear.setInverted(false);
         
         driveTrainMecanumDrive = new MecanumDrive(driveTrainLeftFront, driveTrainLeftRear,
               driveTrainRightFront, driveTrainRightRear);
         
-        ((SendableBase) driveTrainMecanumDrive).setName("DriveTrain", "Mecanum Drive");
+        //((SendableBase) driveTrainMecanumDrive).setName("DriveTrain", "Mecanum Drive");
         driveTrainMecanumDrive.setSafetyEnabled(true);
         driveTrainMecanumDrive.setExpiration(0.1);
         driveTrainMecanumDrive.setMaxOutput(1.0);
@@ -87,19 +87,19 @@ public class RobotMap {
         compressor.setClosedLoopControl(true);
 		
 		grab = new Solenoid(0);
-		((SendableBase) grab).setName("Gripper", "grab");
+		//((SendableBase) grab).setName("Gripper", "grab");
 		grab.set(false);
 		
 		release = new Solenoid(1);
-		((SendableBase) release).setName("Gripper", "release");
+		//((SendableBase) release).setName("Gripper", "release");
 		release.set(false);
 		
 		gripUp = new Solenoid(2);
-		((SendableBase) gripUp).setName("Gripper", "gripUp");
+		//((SendableBase) gripUp).setName("Gripper", "gripUp");
 		gripUp.set(false);
 		
 		gripDown = new Solenoid(3);
-		((SendableBase) gripDown).setName("Gripper", "gripDown");
+		//((SendableBase) gripDown).setName("Gripper", "gripDown");
 		gripDown.set(false);
 		
 		

@@ -1,7 +1,5 @@
 package org.usfirst.frc3319.MyRobot.commands;
-import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc3319.MyRobot.Robot;
 

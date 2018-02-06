@@ -18,6 +18,7 @@ public class SetElevatorSetpoint extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+    	
     	Robot.Elevator.enable();
     	Robot.Elevator.setSetpoint(setpoint);
     }
@@ -25,6 +26,10 @@ public class SetElevatorSetpoint extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+    	//System.out.println("Encoder: " + Robot.Elevator.returnPIDInput());
+    	//System.out.println("PID Position" + Robot.Elevator.getPosition());
+    	//System.out.println("PID On Target" + Robot.Elevator.onTarget());
+    	//System.out.println("PID Setpoint" + Robot.Elevator.getSetpoint());
     }
 
     // Make this return true when this Command no longer needs to run execute()
