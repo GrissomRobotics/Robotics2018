@@ -11,6 +11,9 @@
 
 package org.usfirst.frc3319.MyRobot;
 
+import org.usfirst.frc3319.custom.ADIS16448_IMU;
+
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -22,6 +25,7 @@ import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.Solenoid;
 
@@ -46,7 +50,9 @@ public class RobotMap {
 	public static Compressor compressor;
 	public static SpeedController elevator;
 	public static Encoder elevatorEncoder;
-	public static SerialPort ultraSonic;
+	public static Ultrasonic ultraSonic;
+	public static DigitalInput limitSwitch;
+	public static ADIS16448_IMU  gyro;
 
     public static void init() {
         
@@ -74,14 +80,21 @@ public class RobotMap {
         driveTrainMecanumDrive.setExpiration(0.1);
         driveTrainMecanumDrive.setMaxOutput(1.0);
         
-        ultraSonic = new SerialPort(9600, SerialPort.Port.kOnboard);
+        ultraSonic = new Ultrasonic(3, 4);
+        //((SendableBase) ultraSonic).setName("DriveTrain", "UltraSonic");
+        
+        gyro = new ADIS16448_IMU();
+        //((SendableBase) gyro).setName("DriveTrain","Gyro");
         
         elevator = new Talon (4);
-        ((SendableBase) elevator).setName("Elevator" , "elevator");
+        //((SendableBase) elevator).setName("Elevator" , "elevator");
         elevator.setInverted(false);
         
         elevatorEncoder = new Encoder(new DigitalInput(0), new DigitalInput(1));
-        ((SendableBase) elevatorEncoder).setName("Elevator", "elevatorEncoder");
+        //((SendableBase) elevatorEncoder).setName("Elevator", "elevatorEncoder");
+        
+        limitSwitch = new DigitalInput(2);
+        //((SendableBase) limitSwitch).setName("Elevator", "limitSwitch");
         
         compressor = new Compressor(0);
         compressor.setClosedLoopControl(true);

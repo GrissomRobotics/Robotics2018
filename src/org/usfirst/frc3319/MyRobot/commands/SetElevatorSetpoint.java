@@ -1,6 +1,9 @@
 package org.usfirst.frc3319.MyRobot.commands;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc3319.MyRobot.Robot;
+import org.usfirst.frc3319.MyRobot.subsystems.Elevator;
 
 /**
  *
@@ -18,6 +21,7 @@ public class SetElevatorSetpoint extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+    	Robot.Elevator = new Elevator(SmartDashboard.getNumber("Proportional", 0.5), SmartDashboard.getNumber("Integral", 0.0), SmartDashboard.getNumber("Differential", 2.0));
     	
     	Robot.Elevator.enable();
     	Robot.Elevator.setSetpoint(setpoint);
@@ -26,10 +30,6 @@ public class SetElevatorSetpoint extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-    	//System.out.println("Encoder: " + Robot.Elevator.returnPIDInput());
-    	//System.out.println("PID Position" + Robot.Elevator.getPosition());
-    	//System.out.println("PID On Target" + Robot.Elevator.onTarget());
-    	//System.out.println("PID Setpoint" + Robot.Elevator.getSetpoint());
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -1,5 +1,6 @@
 package org.usfirst.frc3319.MyRobot.commands;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc3319.MyRobot.Robot;
 
@@ -58,9 +59,9 @@ public class DriveWithJoystick extends Command {
     		rightSet = 0;
     	}
     	
-    	Robot.DriveTrain.cartesianDrive(forwardSet, rightSet, turnSet, 0.0);
-    	System.out.println(Robot.DriveTrain.getUltraSonicString());
-    	}
+    	Robot.DriveTrain.cartesianDrive(forwardSet, rightSet, turnSet, Robot.DriveTrain.getGyroValue());
+    	System.out.println(Robot.DriveTrain.getUltraSonicInches());
+       	}
     
 
     // Make this return true when this Command no longer needs to run execute()

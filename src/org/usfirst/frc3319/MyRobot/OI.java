@@ -92,8 +92,12 @@ public class OI {
 		SmartDashboard.putData("LowerGripper", new LowerGripper());
 		SmartDashboard.putData("LowerGripper", new LowerElevator());
 		SmartDashboard.putData("ZeroEncoders", new ZeroEncoders());
-		SmartDashboard.putData("RaiseSwitchHeight", new SetElevatorSetpoint(SWITCH_HEIGHT));
+		SmartDashboard.putData("RaiseSwitchHeight", new SetElevatorSetpoint(15000));
 		SmartDashboard.putData("LowerToDefaultHeight", new SetElevatorSetpoint(0));
+		
+		SmartDashboard.putNumber("Proportional", 0.5);
+		SmartDashboard.putNumber("Integral", 0.0);
+		SmartDashboard.putNumber("Differential", 2.0);
 		
     }
 
