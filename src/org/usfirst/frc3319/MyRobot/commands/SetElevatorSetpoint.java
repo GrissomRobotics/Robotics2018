@@ -21,8 +21,13 @@ public class SetElevatorSetpoint extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-    	Robot.Elevator = new Elevator(SmartDashboard.getNumber("Proportional", 0.5), SmartDashboard.getNumber("Integral", 0.0), SmartDashboard.getNumber("Differential", 2.0));
-    	
+    	//Use different PID values depending on if the elevator is going up or down
+    	if (setpoint > Robot.Elevator.getPosition()) { //Elevator is going up
+    		Robot.Elevator.setPID(SmartDashboard.getNumber("Elevator Proportional", 0.5), SmartDashboard.getNumber("Elevator Integral", 0.0), SmartDashboard.getNumber("Elevator Differential", 2.0));
+    	} else { //Going down
+    		Robot.Elevator.setPID(SmartDashboard.getNumber("Elevator Proportional", 0.5), SmartDashboard.getNumber("Elevator Integral", 0.0), SmartDashboard.getNumber("Elevator Differential", 2.0));
+    	}
+    	 
     	Robot.Elevator.enable();
     	Robot.Elevator.setSetpoint(setpoint);
     }

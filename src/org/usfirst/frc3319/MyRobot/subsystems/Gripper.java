@@ -14,6 +14,8 @@ package org.usfirst.frc3319.MyRobot.subsystems;
 import org.usfirst.frc3319.MyRobot.RobotMap;
 import org.usfirst.frc3319.MyRobot.commands.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 
 /**
@@ -25,6 +27,7 @@ public class Gripper extends Subsystem {
 	private final Solenoid grab = RobotMap.grab;
 	private final Solenoid gripUp = RobotMap.gripUp;
 	private final Solenoid gripDown = RobotMap.gripDown;
+	private final Compressor compressor = RobotMap.compressor;
 	
 
 
@@ -39,6 +42,11 @@ public class Gripper extends Subsystem {
     	grab.set(false);
     	gripUp.set(false);
     	gripDown.set(false);
+    	if(SmartDashboard.getBoolean("Compressor On", false)) {
+    		compressor.start();
+    	} else {
+    		compressor.stop();
+    	}
     }
     
     public void close() {

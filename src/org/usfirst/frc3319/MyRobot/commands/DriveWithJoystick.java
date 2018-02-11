@@ -3,11 +3,16 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc3319.MyRobot.Robot;
+import org.usfirst.frc3319.custom.Ramper;
 
 /**
  *
  */
 public class DriveWithJoystick extends Command {
+	public Ramper rampForward;
+	public Ramper rampRight;
+	public Ramper rampTurn;
+	
 
     public DriveWithJoystick() {
         requires(Robot.DriveTrain);
@@ -16,7 +21,9 @@ public class DriveWithJoystick extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-    	
+    	rampForward = new Ramper(SmartDashboard.getNumber("Speed Step", 0.02)); 
+    	rampRight = new Ramper(SmartDashboard.getNumber("Speed Step", 0.02)); 
+    	rampTurn = new Ramper(SmartDashboard.getNumber("Speed Step", 0.02));
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -29,38 +36,38 @@ public class DriveWithJoystick extends Command {
     	double turnSet;
     	double forwardSet;
     	double rightSet;
+    	double rightThreshold = 0.1;
     	double deadThreshold = 0.1;
     	
     	//Correct deadzones
     	//Logic is: if the reading is greater than the threshold, make the setter equal to it, otherwise, make the setter equal to 0
     	turn = Robot.oi.getRotationLeft()-Robot.oi.getRotationRight();
-    	forward = Robot.oi.getXValue();
-    	right = Robot.oi.getYValue();
+    	right = Robot.oi.getXValue();
+    	forward = Robot.oi.getYValue();
     	
     	if (Math.abs(turn) > deadThreshold) {
-    		turnSet = turn;
+    		turnSet = rampTurn.ramp(turn);
     	}
     	else {
     		turnSet = 0;
     	}
 
     	if (Math.abs(forward) > deadThreshold) {
-    		forwardSet = forward;
+    		forwardSet = rampForward.ramp(forward);
     	}
     	else {
     		forwardSet = 0;
     	}
     	
 
-    	if (Math.abs(right) > deadThreshold) {
-    		rightSet = right;
+    	if (Math.abs(right) > rightThreshold) {
+    		rightSet = rampForward.ramp(right);
     	}
     	else {
     		rightSet = 0;
     	}
     	
-    	Robot.DriveTrain.cartesianDrive(forwardSet, rightSet, turnSet, Robot.DriveTrain.getGyroValue());
-    	System.out.println(Robot.DriveTrain.getUltraSonicInches());
+    	Robot.DriveTrain.cartesianDrive(rightSet, forwardSet, turnSet);
        	}
     
 
@@ -73,6 +80,7 @@ public class DriveWithJoystick extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
+    	Robot.DriveTrain.stop();
     }
 
     // Called when another command which requires one or more of the same

@@ -48,12 +48,21 @@ public class Robot extends TimedRobot {
         Gripper = new Gripper();
         Elevator = new Elevator();
         
+        //Send the commands and subsystems to the dashboard
+        SmartDashboard.putData(DriveTrain);
+        SmartDashboard.putData(Gripper);
+        SmartDashboard.putData(Elevator);
+        
+        SmartDashboard.putData(Scheduler.getInstance());
+        
 
         // OI must be constructed after subsystems. If the OI creates Commands
         //(which it very likely will), subsystems are not guaranteed to be
         // constructed yet. Thus, their requires() statements may grab null
         // pointers. Bad news. Don't move it.
         oi = new OI();
+        
+        Robot.DriveTrain.resetGyro();
 
         // Add commands to Autonomous Sendable Chooser
 

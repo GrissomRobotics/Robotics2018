@@ -12,13 +12,15 @@ public class DriveInches extends Command {
         requires(Robot.DriveTrain);
         double currentUltraSonicReading = Robot.DriveTrain.getUltraSonicInches();
         readingTarget = currentUltraSonicReading - inchesToDrive;
+        Robot.DriveTrain.setSetpoint(readingTarget);
+        //Set the gyro controller's setpoint to be whatever the current reading is so that it drives straight
+        Robot.DriveTrain.setGyroSetpoint(Robot.DriveTrain.getGyroValue());
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-    	//Drive forward (along the y-axis) at full speed
-    	Robot.DriveTrain.cartesianDrive(0, 1.0, 0, 0);
+    	Robot.DriveTrain.enable();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -29,9 +31,7 @@ public class DriveInches extends Command {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-    	//The task is finished with 0.05 inches of accuracy
-    	//Do not use == because garbage data likely exists at the very end of the double reading
-        return (Robot.DriveTrain.getUltraSonicInches()-readingTarget) <= 0.05;
+        return Robot.DriveTrain.onTarget();
     }
 
     // Called once after isFinished returns true
@@ -44,5 +44,6 @@ public class DriveInches extends Command {
     // subsystems is scheduled to run
     @Override
     protected void interrupted() {
+    	Robot.DriveTrain.stop();
     }
 }

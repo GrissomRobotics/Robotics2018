@@ -67,19 +67,15 @@ public class OI {
 		gripperOpen = new JoystickButton(stick, 5);
 		gripperRaise = new JoystickButton(stick, 3);
 		gripperLower = new JoystickButton(stick, 4);
-		elevatorLower = new JoystickButton(stick, 1);
-		elevatorRaise = new JoystickButton(stick, 2);
+		elevatorLower = new JoystickButton(stick, 1);//A
+		elevatorRaise = new JoystickButton(stick, 2);//B
 
 		
 		
 		gripperClose.whenPressed(new CloseGripper());
 		gripperOpen.whenPressed(new OpenGripper());
 		gripperRaise.whenPressed(new RaiseGripper());
-		gripperLower.whenPressed(new LowerGripper());
-		
-		elevatorLower.whileHeld(new LowerElevator());
-		elevatorRaise.whileHeld(new RaiseElevator());
-		
+		gripperLower.whenPressed(new LowerGripper());		
 		
 
 
@@ -90,14 +86,23 @@ public class OI {
 		SmartDashboard.putData("OpenGripper", new OpenGripper());
 		SmartDashboard.putData("RaiseGripper", new RaiseGripper());
 		SmartDashboard.putData("LowerGripper", new LowerGripper());
-		SmartDashboard.putData("LowerGripper", new LowerElevator());
 		SmartDashboard.putData("ZeroEncoders", new ZeroEncoders());
 		SmartDashboard.putData("RaiseSwitchHeight", new SetElevatorSetpoint(15000));
 		SmartDashboard.putData("LowerToDefaultHeight", new SetElevatorSetpoint(0));
+		SmartDashboard.putData("Turn90Degrees", new TurnAngle(90));
 		
-		SmartDashboard.putNumber("Proportional", 0.5);
-		SmartDashboard.putNumber("Integral", 0.0);
-		SmartDashboard.putNumber("Differential", 2.0);
+		SmartDashboard.putNumber("Elevator Proportional", 0.5);
+		SmartDashboard.putNumber("Elevator Integral", 0.0);
+		SmartDashboard.putNumber("Elevator Differential", 2.0);
+		
+		SmartDashboard.putNumber("Gyro Proportional", 0.5);
+		SmartDashboard.putNumber("Gyro Integral", 0.0);
+		SmartDashboard.putNumber("Gyro Differential", 2.0);
+		
+		SmartDashboard.putBoolean("Compressor On", false);
+		SmartDashboard.putNumber("Speed Step", 0.02);
+		
+		SmartDashboard.putNumber("Elevator Speed", 0);
 		
     }
 
@@ -123,7 +128,9 @@ public class OI {
     	return stick.getRawAxis(3);
     }
     
-
+    public int getPOV() {
+    	return stick.getPOV();
+    }
 
 }
 

@@ -12,6 +12,8 @@
 package org.usfirst.frc3319.MyRobot;
 
 import org.usfirst.frc3319.custom.ADIS16448_IMU;
+import org.usfirst.frc3319.custom.Adis;
+import org.usfirst.frc3319.custom.MecanumPIDGyro;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -19,6 +21,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SendableBase;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SerialPort.Port;
@@ -52,68 +55,75 @@ public class RobotMap {
 	public static Encoder elevatorEncoder;
 	public static Ultrasonic ultraSonic;
 	public static DigitalInput limitSwitch;
-	public static ADIS16448_IMU  gyro;
+	public static Adis  gyro;
+	public static PIDController gyroController;
+	
 
     public static void init() {
         
         driveTrainLeftFront = new Talon(0);
-        //((SendableBase) driveTrainLeftFront).setName("DriveTrain", "leftFront");
+        ((SendableBase) driveTrainLeftFront).setName("DriveTrain", "leftFront");
         driveTrainLeftFront.setInverted(true);
         
         driveTrainRightFront = new Talon(1);
-        //((SendableBase) driveTrainRightFront).setName("DriveTrain", "rightFront");
+        ((SendableBase) driveTrainRightFront).setName("DriveTrain", "rightFront");
         driveTrainRightFront.setInverted(false);
         
         driveTrainLeftRear = new Talon(2);
-        //((SendableBase) driveTrainLeftRear).setName("DriveTrain", "leftRear");
+        ((SendableBase) driveTrainLeftRear).setName("DriveTrain", "leftRear");
         driveTrainLeftRear.setInverted(true);
         
         driveTrainRightRear = new Talon(3);
-        //((SendableBase) driveTrainRightRear).setName("DriveTrain", "rightRear");
+        ((SendableBase) driveTrainRightRear).setName("DriveTrain", "rightRear");
         driveTrainRightRear.setInverted(false);
         
         driveTrainMecanumDrive = new MecanumDrive(driveTrainLeftFront, driveTrainLeftRear,
               driveTrainRightFront, driveTrainRightRear);
         
-        //((SendableBase) driveTrainMecanumDrive).setName("DriveTrain", "Mecanum Drive");
+        ((SendableBase) driveTrainMecanumDrive).setName("DriveTrain", "Mecanum Drive");
         driveTrainMecanumDrive.setSafetyEnabled(true);
         driveTrainMecanumDrive.setExpiration(0.1);
         driveTrainMecanumDrive.setMaxOutput(1.0);
-        
+                
         ultraSonic = new Ultrasonic(3, 4);
-        //((SendableBase) ultraSonic).setName("DriveTrain", "UltraSonic");
+        ((SendableBase) ultraSonic).setName("DriveTrain", "UltraSonic");
         
-        gyro = new ADIS16448_IMU();
-        //((SendableBase) gyro).setName("DriveTrain","Gyro");
+        gyro = new Adis();
+        ((SendableBase) gyro).setName("DriveTrain","Gyro");
+        
+        gyroController = new PIDController(0.5, 0, 2.0, gyro, new MecanumPIDGyro(driveTrainMecanumDrive));
+        ((SendableBase) gyroController).setName("DriveTrain", "gyroController");
         
         elevator = new Talon (4);
-        //((SendableBase) elevator).setName("Elevator" , "elevator");
+        ((SendableBase) elevator).setName("Elevator" , "elevator");
         elevator.setInverted(false);
         
         elevatorEncoder = new Encoder(new DigitalInput(0), new DigitalInput(1));
-        //((SendableBase) elevatorEncoder).setName("Elevator", "elevatorEncoder");
+        ((SendableBase) elevatorEncoder).setName("Elevator", "elevatorEncoder");
         
         limitSwitch = new DigitalInput(2);
-        //((SendableBase) limitSwitch).setName("Elevator", "limitSwitch");
+        ((SendableBase) limitSwitch).setName("Elevator", "limitSwitch");
+                
         
         compressor = new Compressor(0);
         compressor.setClosedLoopControl(true);
 		
 		grab = new Solenoid(0);
-		//((SendableBase) grab).setName("Gripper", "grab");
+		((SendableBase) grab).setName("Gripper", "grab");
 		grab.set(false);
 		
 		release = new Solenoid(1);
-		//((SendableBase) release).setName("Gripper", "release");
+		((SendableBase) release).setName("Gripper", "release");
 		release.set(false);
 		
 		gripUp = new Solenoid(2);
-		//((SendableBase) gripUp).setName("Gripper", "gripUp");
+		((SendableBase) gripUp).setName("Gripper", "gripUp");
 		gripUp.set(false);
 		
 		gripDown = new Solenoid(3);
-		//((SendableBase) gripDown).setName("Gripper", "gripDown");
+		((SendableBase) gripDown).setName("Gripper", "gripDown");
 		gripDown.set(false);
+		
 		
 		
     }

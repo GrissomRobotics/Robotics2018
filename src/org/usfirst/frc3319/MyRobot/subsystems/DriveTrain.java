@@ -15,9 +15,13 @@ import org.usfirst.frc3319.MyRobot.Robot;
 import org.usfirst.frc3319.MyRobot.RobotMap;
 import org.usfirst.frc3319.MyRobot.commands.*;
 import org.usfirst.frc3319.custom.ADIS16448_IMU;
+import org.usfirst.frc3319.custom.Adis;
+
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -29,15 +33,28 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class DriveTrain extends Subsystem {
-
-    private final SpeedController leftFront = RobotMap.driveTrainLeftFront;
+public class DriveTrain extends PIDSubsystem {
+	private final SpeedController leftFront = RobotMap.driveTrainLeftFront;
     private final SpeedController rightFront = RobotMap.driveTrainRightFront;
     private final SpeedController leftRear = RobotMap.driveTrainLeftRear;
     private final SpeedController rightRear = RobotMap.driveTrainRightRear;
     private final MecanumDrive mecanumDrive = RobotMap.driveTrainMecanumDrive;
     private final Ultrasonic ultraSonic = RobotMap.ultraSonic;
-    private final ADIS16448_IMU  gyro = RobotMap.gyro;
+    private final Adis  gyro = RobotMap.gyro;
+    private final PIDController gyroController = RobotMap.gyroController;
+    
+	public DriveTrain() {
+		super("Elevator", 0.5,0.0,2.0);
+		setAbsoluteTolerance(0.1); //Set 0.1 inches as the tolerance for purposes of driving
+    	getPIDController().setContinuous(false);
+    	setOutputRange(-1.0, 1.0);
+    	
+    	gyroController.setContinuous(false);
+    	gyroController.setOutputRange(-0.4, 0.4);//Set turning speed output to be not more than 40% power
+    	gyroController.setAbsoluteTolerance(2); //Set tolerance on the gyro PID for 2 degrees
+    	
+
+	}
 
 
     @Override
@@ -48,13 +65,14 @@ public class DriveTrain extends Subsystem {
 
     @Override
     public void periodic() {
-    	SmartDashboard.putNumber("Gyro Reading", getGyroValue());
+    	SmartDashboard.putNumber("Robot Heading value", getGyroValue());
+    	SmartDashboard.putNumber("Gyro PID power", gyroController.get());
     	
     }
     
-    public void cartesianDrive(double xValue, double yValue, double rotationValue, double gyroCorrection) {
+    public void cartesianDrive(double xValue, double yValue, double rotationValue) {
     	//Negate xValue to resolve strafing direction issue
-    	mecanumDrive.driveCartesian(-xValue, yValue, rotationValue, gyroCorrection);
+    	mecanumDrive.driveCartesian(-xValue, yValue, rotationValue);
     }
     
     public void stop() {
@@ -70,7 +88,48 @@ public class DriveTrain extends Subsystem {
     }
     
     public double getGyroValue() {
-    	return gyro.getAngle();
+    	return gyro.getRobotHeading();
     }
+    
+    public void resetGyro() {
+    	gyro.reset();
+    }
+    
+    public void calibrateGyro() {
+    	gyro.calibrate();
+    }
+
+	@Override
+	protected double returnPIDInput() {
+		return getUltraSonicInches();
+	}
+
+	@Override
+	protected void usePIDOutput(double output) {
+		//Negate output because going forward will decrease the ultraSonic reading
+		mecanumDrive.driveCartesian(0, -output, gyroController.get());
+	}
+	
+	public void setGyroSetpoint(double setpoint) {
+		gyroController.setSetpoint(setpoint);
+	}
+	
+	//Only use for the purpose of turning with the gyro
+	//This will not do anything for any other drive train purpose
+	public void enableGyroController() {
+		gyroController.enable();
+	}
+	
+	public void disableGyroController() {
+		gyroController.disable();
+	}
+	
+	public boolean isGyroControllerOnTarget() {
+		return gyroController.onTarget();
+	}
+	
+	public void setGyroPID(double p, double i, double d) {
+		gyroController.setPID(p, i, d);
+	}
 }
 

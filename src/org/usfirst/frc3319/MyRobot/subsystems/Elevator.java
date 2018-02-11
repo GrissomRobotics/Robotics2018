@@ -1,13 +1,14 @@
 package org.usfirst.frc3319.MyRobot.subsystems;
 
 import org.usfirst.frc3319.MyRobot.RobotMap;
+import org.usfirst.frc3319.MyRobot.commands.ControlElevator;
+
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SendableBase;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 
 /**
  *
@@ -25,17 +26,8 @@ public class Elevator extends PIDSubsystem {
     	getPIDController().setContinuous(false);
     	setOutputRange(-0.8, 0.8);
     	zeroEncoders();
-    	((SendableBase) this).setName("Elevator", "PID Controller");
     }
     
-    public Elevator(double p, double i, double d) {
-    	super("Elevator", p,i,d);
-    	setAbsoluteTolerance(100);
-    	getPIDController().setContinuous(false);
-    	setOutputRange(-0.8, 0.8);
-    	zeroEncoders();
-    	((SendableBase) this).setName("Elevator", "PID Controller");
-    }
    
 
     @Override
@@ -43,6 +35,7 @@ public class Elevator extends PIDSubsystem {
        
         // Set the default command for a subsystem here.
         // setDefaultCommand(new MySpecialCommand());
+    	setDefaultCommand(new ControlElevator());
     }
 
     @Override
@@ -78,6 +71,10 @@ public class Elevator extends PIDSubsystem {
 	
 	public boolean getLimitSwitch() {
 		return limitSwitch.get();
+	}
+	
+	public void setPID(double p, double i, double d) {
+		this.getPIDController().setPID(p, i, d);
 	}
 	
 }
