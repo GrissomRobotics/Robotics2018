@@ -9,21 +9,22 @@ import org.usfirst.frc3319.custom.Ramper;
  *
  */
 public class DriveWithJoystick extends Command {
-	public Ramper rampForward;
-	public Ramper rampRight;
-	public Ramper rampTurn;
+	private Ramper rampForward;
+	private Ramper rampRight;
+	private Ramper rampTurn;
 	
 
     public DriveWithJoystick() {
         requires(Robot.DriveTrain);
+        setInterruptible(true);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-    	rampForward = new Ramper(SmartDashboard.getNumber("Speed Step", 0.02)); 
-    	rampRight = new Ramper(SmartDashboard.getNumber("Speed Step", 0.02)); 
-    	rampTurn = new Ramper(SmartDashboard.getNumber("Speed Step", 0.02));
+    	rampForward = new Ramper(SmartDashboard.getNumber("Speed Step Drive Train", Robot.DriveTrain.defaultStep)); 
+    	rampRight = new Ramper(SmartDashboard.getNumber("Speed Step Drive Train", Robot.DriveTrain.defaultStep)); 
+    	rampTurn = new Ramper(SmartDashboard.getNumber("Speed Step Drive Train", Robot.DriveTrain.defaultStep));
     }
 
     // Called repeatedly when this Command is scheduled to run

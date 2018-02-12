@@ -13,7 +13,7 @@ public class ControlElevator extends Command {
     
     public ControlElevator() {
         requires(Robot.Elevator);
-        this.setInterruptible(true);
+        setInterruptible(true);
     }
 
     // Called just before this Command runs the first time

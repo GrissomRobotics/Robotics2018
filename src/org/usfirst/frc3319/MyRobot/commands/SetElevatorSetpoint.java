@@ -16,6 +16,7 @@ public class SetElevatorSetpoint extends Command {
     public SetElevatorSetpoint(double setpoint) {
         requires(Robot.Elevator);
         this.setpoint = setpoint;
+        setInterruptible(true);
     }
 
     // Called just before this Command runs the first time

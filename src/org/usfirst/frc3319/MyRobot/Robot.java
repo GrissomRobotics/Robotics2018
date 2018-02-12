@@ -11,8 +11,10 @@
 
 package org.usfirst.frc3319.MyRobot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,7 +31,7 @@ import org.usfirst.frc3319.MyRobot.subsystems.*;
 public class Robot extends TimedRobot {
 
     Command autonomousCommand;
-    SendableChooser<Command> chooser = new SendableChooser<>();
+    SendableChooser<CommandGroup> chooser = new SendableChooser<>();
 
     public static OI oi;
     public static DriveTrain DriveTrain;
@@ -66,7 +68,7 @@ public class Robot extends TimedRobot {
 
         // Add commands to Autonomous Sendable Chooser
 
-        chooser.addDefault("Autonomous Command", new AutonomousCommand());
+        chooser.addDefault("Autonomous Command", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage()));
 
         //SmartDashboard.putData("Auto mode", chooser);
     }

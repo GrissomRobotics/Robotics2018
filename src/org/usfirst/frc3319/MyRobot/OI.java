@@ -13,6 +13,7 @@ package org.usfirst.frc3319.MyRobot;
 
 import org.usfirst.frc3319.MyRobot.commands.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
@@ -58,7 +59,7 @@ public class OI {
 	public JoystickButton elevatorLower;
 	public JoystickButton elevatorRaise;
 		
-	private double SWITCH_HEIGHT = 70000;
+	public double SWITCH_HEIGHT = 70000;
 
     public OI() {
 
@@ -80,14 +81,14 @@ public class OI {
 
 
         // SmartDashboard Buttons
-        SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
+        SmartDashboard.putData("Autonomous Command", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage()));
         SmartDashboard.putData("DriveWithJoystick", new DriveWithJoystick());
 		SmartDashboard.putData("CloseGripper", new CloseGripper());
 		SmartDashboard.putData("OpenGripper", new OpenGripper());
 		SmartDashboard.putData("RaiseGripper", new RaiseGripper());
 		SmartDashboard.putData("LowerGripper", new LowerGripper());
 		SmartDashboard.putData("ZeroEncoders", new ZeroEncoders());
-		SmartDashboard.putData("RaiseSwitchHeight", new SetElevatorSetpoint(15000));
+		SmartDashboard.putData("RaiseSwitchHeight", new SetElevatorSetpoint(SWITCH_HEIGHT));
 		SmartDashboard.putData("LowerToDefaultHeight", new SetElevatorSetpoint(0));
 		SmartDashboard.putData("Turn90Degrees", new TurnAngle(90));
 		
@@ -100,7 +101,7 @@ public class OI {
 		SmartDashboard.putNumber("Gyro Differential", 2.0);
 		
 		SmartDashboard.putBoolean("Compressor On", false);
-		SmartDashboard.putNumber("Speed Step", 0.02);
+		SmartDashboard.putNumber("Speed Step Drive Train", Robot.DriveTrain.defaultStep);
 		
 		SmartDashboard.putNumber("Elevator Speed", 0);
 		

@@ -43,6 +43,8 @@ public class DriveTrain extends PIDSubsystem {
     private final Adis  gyro = RobotMap.gyro;
     private final PIDController gyroController = RobotMap.gyroController;
     
+	public double defaultStep = 0.025;
+    
 	public DriveTrain() {
 		super("Elevator", 0.5,0.0,2.0);
 		setAbsoluteTolerance(0.1); //Set 0.1 inches as the tolerance for purposes of driving
