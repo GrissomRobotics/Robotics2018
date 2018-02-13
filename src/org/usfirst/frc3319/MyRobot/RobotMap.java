@@ -54,7 +54,8 @@ public class RobotMap {
 	public static SpeedController elevator;
 	public static Encoder elevatorEncoder;
 	public static Ultrasonic ultraSonic;
-	public static DigitalInput limitSwitch;
+	public static DigitalInput limitSwitchUpper;
+	public static DigitalInput limitSwitchLower;
 	public static Adis  gyro;
 	public static PIDController gyroController;
 	
@@ -85,7 +86,7 @@ public class RobotMap {
         driveTrainMecanumDrive.setExpiration(0.1);
         driveTrainMecanumDrive.setMaxOutput(1.0);
                 
-        ultraSonic = new Ultrasonic(3, 4);
+        ultraSonic = new Ultrasonic(4, 5);
         ((SendableBase) ultraSonic).setName("DriveTrain", "UltraSonic");
         
         gyro = new Adis();
@@ -101,8 +102,11 @@ public class RobotMap {
         elevatorEncoder = new Encoder(new DigitalInput(0), new DigitalInput(1));
         ((SendableBase) elevatorEncoder).setName("Elevator", "elevatorEncoder");
         
-        limitSwitch = new DigitalInput(2);
-        ((SendableBase) limitSwitch).setName("Elevator", "limitSwitch");
+        limitSwitchUpper = new DigitalInput(2);
+        ((SendableBase) limitSwitchUpper).setName("Elevator", "limitSwitchUpper");
+        
+        limitSwitchLower = new DigitalInput(3);
+        ((SendableBase) limitSwitchLower).setName("Elevator", "limitSwitchLower");
                 
         
         compressor = new Compressor(0);

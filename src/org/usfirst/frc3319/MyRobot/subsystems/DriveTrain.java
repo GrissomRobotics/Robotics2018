@@ -52,7 +52,7 @@ public class DriveTrain extends PIDSubsystem {
     	setOutputRange(-1.0, 1.0);
     	
     	gyroController.setContinuous(false);
-    	gyroController.setOutputRange(-0.4, 0.4);//Set turning speed output to be not more than 40% power
+    	gyroController.setOutputRange(-0.4, 0.4); //Set turning speed output to be not more than 40% power
     	gyroController.setAbsoluteTolerance(2); //Set tolerance on the gyro PID for 2 degrees
     	
 

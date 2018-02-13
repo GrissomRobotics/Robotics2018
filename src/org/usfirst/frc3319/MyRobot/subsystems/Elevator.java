@@ -18,7 +18,8 @@ public class Elevator extends PIDSubsystem {
 
     private final SpeedController elevator = RobotMap.elevator;
     private final Encoder elevatorEncoder = RobotMap.elevatorEncoder;
-    private final DigitalInput limitSwitch = RobotMap.limitSwitch;
+    private final DigitalInput limitSwitchUpper = RobotMap.limitSwitchUpper;
+    private final DigitalInput limitSwitchLower = RobotMap.limitSwitchLower;
     
     public Elevator() {
     	super("Elevator", 0.5,0.0,2.0);
@@ -40,12 +41,7 @@ public class Elevator extends PIDSubsystem {
 
     @Override
     public void periodic() {
-    	SmartDashboard.putString("Elevator Encoder", Double.toString(returnPIDInput()));
-    	SmartDashboard.putBoolean("Limit Switch", limitSwitch.get());
-    	if (!limitSwitch.get()) {
-    		//If the limit switch is not depressed, the elevator is about to go off of the tracks, so disable
-    		disable();
-    	}
+    	
     }
 
 
@@ -57,7 +53,13 @@ public class Elevator extends PIDSubsystem {
 
 	@Override
 	protected void usePIDOutput(double output) {
-		elevator.pidWrite(output);
+		//For output, positive is down, negative is up
+		
+		if (output > 0 && limitSwitchLower.get()) {} //If the output is trying to go down, and the lower limit switch is depressed, do not move
+		else if (output < 0 && limitSwitchUpper.get()) {} //If the output is trying to go up, and the upper limit switch is depressed, do not move
+		else { //If neither of those is true, write the output to the motor
+			elevator.pidWrite(output);
+		}
 	}
 	
 	public void zeroEncoders() {
@@ -66,11 +68,15 @@ public class Elevator extends PIDSubsystem {
 	
 	public void setSpeed(double speed)
     {
-    	elevator.set(speed);
+    	usePIDOutput(speed);
     }
 	
-	public boolean getLimitSwitch() {
-		return limitSwitch.get();
+	public boolean getLimitSwitchUpper() {
+		return limitSwitchUpper.get();
+	}
+	
+	public boolean getLimitSwitchLower() {
+		return limitSwitchLower.get();
 	}
 	
 	public void setPID(double p, double i, double d) {
