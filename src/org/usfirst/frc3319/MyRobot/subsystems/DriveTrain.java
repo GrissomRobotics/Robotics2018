@@ -16,6 +16,7 @@ import org.usfirst.frc3319.MyRobot.RobotMap;
 import org.usfirst.frc3319.MyRobot.commands.*;
 import org.usfirst.frc3319.custom.ADIS16448_IMU;
 import org.usfirst.frc3319.custom.Adis;
+import org.usfirst.frc3319.custom.UltrasonicWrapper;
 
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -39,7 +40,7 @@ public class DriveTrain extends PIDSubsystem {
     private final SpeedController leftRear = RobotMap.driveTrainLeftRear;
     private final SpeedController rightRear = RobotMap.driveTrainRightRear;
     private final MecanumDrive mecanumDrive = RobotMap.driveTrainMecanumDrive;
-    private final Ultrasonic ultraSonic = RobotMap.ultraSonic;
+    private final Ultrasonic ultraSonic = RobotMap.ultraSonicFront;
     private final Adis  gyro = RobotMap.gyro;
     private final PIDController gyroController = RobotMap.gyroController;
     
@@ -52,7 +53,7 @@ public class DriveTrain extends PIDSubsystem {
     	setOutputRange(-1.0, 1.0);
     	
     	gyroController.setContinuous(false);
-    	gyroController.setOutputRange(-0.4, 0.4); //Set turning speed output to be not more than 40% power
+    	gyroController.setOutputRange(-0.6, 0.6); //Set turning speed output to be not more than 40% power
     	gyroController.setAbsoluteTolerance(2); //Set tolerance on the gyro PID for 2 degrees
     	
 
@@ -69,7 +70,7 @@ public class DriveTrain extends PIDSubsystem {
     public void periodic() {
     	SmartDashboard.putNumber("Robot Heading value", getGyroValue());
     	SmartDashboard.putNumber("Gyro PID power", gyroController.get());
-    	
+    	SmartDashboard.putNumber("Ultrasonic reading", getUltraSonicInches());
     }
     
     public void cartesianDrive(double xValue, double yValue, double rotationValue) {

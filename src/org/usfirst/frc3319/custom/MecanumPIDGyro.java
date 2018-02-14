@@ -18,7 +18,8 @@ public class MecanumPIDGyro implements PIDOutput {
 	@Override
 	public void pidWrite(double output) {
 		//Pass the output only to the Z-rotation because this is for turning with the gyro
-		 driveTrain.driveCartesian(0, 0, output);
+		//Negate so that the turns are consistent with gyro values
+		 driveTrain.driveCartesian(0, 0, -output);
 
 	}
 

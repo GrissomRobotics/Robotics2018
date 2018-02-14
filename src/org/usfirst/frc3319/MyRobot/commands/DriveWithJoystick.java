@@ -62,7 +62,7 @@ public class DriveWithJoystick extends Command {
     	
 
     	if (Math.abs(right) > rightThreshold) {
-    		rightSet = rampForward.ramp(right);
+    		rightSet = rampRight.ramp(right);
     	}
     	else {
     		rightSet = 0;

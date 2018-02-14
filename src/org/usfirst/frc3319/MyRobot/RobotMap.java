@@ -14,6 +14,7 @@ package org.usfirst.frc3319.MyRobot;
 import org.usfirst.frc3319.custom.ADIS16448_IMU;
 import org.usfirst.frc3319.custom.Adis;
 import org.usfirst.frc3319.custom.MecanumPIDGyro;
+import org.usfirst.frc3319.custom.UltrasonicWrapper;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -53,7 +54,9 @@ public class RobotMap {
 	public static Compressor compressor;
 	public static SpeedController elevator;
 	public static Encoder elevatorEncoder;
-	public static Ultrasonic ultraSonic;
+	public static Ultrasonic ultraSonicFront;
+	public static Ultrasonic ultraSonicBack;
+	public static UltrasonicWrapper ultraSonic;
 	public static DigitalInput limitSwitchUpper;
 	public static DigitalInput limitSwitchLower;
 	public static Adis  gyro;
@@ -86,8 +89,9 @@ public class RobotMap {
         driveTrainMecanumDrive.setExpiration(0.1);
         driveTrainMecanumDrive.setMaxOutput(1.0);
                 
-        ultraSonic = new Ultrasonic(4, 5);
-        ((SendableBase) ultraSonic).setName("DriveTrain", "UltraSonic");
+        ultraSonicFront = new Ultrasonic(6, 7);
+        ultraSonicBack = new Ultrasonic(8, 9);
+        ultraSonic = new UltrasonicWrapper(ultraSonicFront, ultraSonicBack);
         
         gyro = new Adis();
         ((SendableBase) gyro).setName("DriveTrain","Gyro");

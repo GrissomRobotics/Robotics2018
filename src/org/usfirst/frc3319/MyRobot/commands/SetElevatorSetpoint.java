@@ -23,10 +23,12 @@ public class SetElevatorSetpoint extends Command {
     @Override
     protected void initialize() {
     	//Use different PID values depending on if the elevator is going up or down
-    	if (setpoint > Robot.Elevator.getPosition()) { //Elevator is going up
-    		Robot.Elevator.setPID(SmartDashboard.getNumber("Elevator Proportional", 0.5), SmartDashboard.getNumber("Elevator Integral", 0.0), SmartDashboard.getNumber("Elevator Differential", 2.0));
+    	if (setpoint < Robot.Elevator.getPosition()) { //Elevator is going up
+    		Robot.Elevator.setPID(SmartDashboard.getNumber("Elevator Proportional", 0.4), SmartDashboard.getNumber("Elevator Integral", 0.0), SmartDashboard.getNumber("Elevator Differential", 0.75), SmartDashboard.getNumber("Elevator Feed Forward", -0.125));
+    		System.out.println("Going up");
     	} else { //Going down
-    		Robot.Elevator.setPID(SmartDashboard.getNumber("Elevator Proportional", 0.5), SmartDashboard.getNumber("Elevator Integral", 0.0), SmartDashboard.getNumber("Elevator Differential", 2.0));
+    		Robot.Elevator.setPID(SmartDashboard.getNumber("Elevator Proportional", 0.4), SmartDashboard.getNumber("Elevator Integral", 0.0), SmartDashboard.getNumber("Elevator Differential", 0.75), SmartDashboard.getNumber("Elevator Feed Forward", -0.125));
+    		System.out.println("Going down");
     	}
     	 
     	Robot.Elevator.enable();
@@ -41,7 +43,10 @@ public class SetElevatorSetpoint extends Command {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        return Robot.Elevator.onTarget();
+    	//if (Robot.Elevator.onTarget() && setpoint == 0) {
+    	//	return true;
+    	//}
+       return Robot.Elevator.onTarget();
     }
 
     // Called once after isFinished returns true

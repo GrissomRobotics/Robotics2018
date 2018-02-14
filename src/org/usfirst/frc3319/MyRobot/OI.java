@@ -59,7 +59,9 @@ public class OI {
 	public JoystickButton elevatorLower;
 	public JoystickButton elevatorRaise;
 		
-	public double SWITCH_HEIGHT = 70000;
+	//heights are negative because the up is negative on the elevator
+	public double SWITCH_HEIGHT = -4763;
+	public double SCALE_HEIGHT = -16275;
 
     public OI() {
 
@@ -82,23 +84,22 @@ public class OI {
 
         // SmartDashboard Buttons
         SmartDashboard.putData("Autonomous Command", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage()));
-        SmartDashboard.putData("DriveWithJoystick", new DriveWithJoystick());
 		SmartDashboard.putData("CloseGripper", new CloseGripper());
 		SmartDashboard.putData("OpenGripper", new OpenGripper());
 		SmartDashboard.putData("RaiseGripper", new RaiseGripper());
 		SmartDashboard.putData("LowerGripper", new LowerGripper());
 		SmartDashboard.putData("ZeroEncoders", new ZeroEncoders());
 		SmartDashboard.putData("RaiseSwitchHeight", new SetElevatorSetpoint(SWITCH_HEIGHT));
+		SmartDashboard.putData("RaiseScaleHeight", new SetElevatorSetpoint(SCALE_HEIGHT));
 		SmartDashboard.putData("LowerToDefaultHeight", new SetElevatorSetpoint(0));
 		SmartDashboard.putData("Turn90Degrees", new TurnAngle(90));
+		SmartDashboard.putData("ZeroGyro", new ZeroGyro());
 		
-		SmartDashboard.putNumber("Elevator Proportional", 0.5);
+		SmartDashboard.putNumber("Elevator Proportional", 0.4);
 		SmartDashboard.putNumber("Elevator Integral", 0.0);
-		SmartDashboard.putNumber("Elevator Differential", 2.0);
+		SmartDashboard.putNumber("Elevator Differential", 0.75);
+		SmartDashboard.putNumber("Elevator Feed Forward", -0.125);
 		
-		SmartDashboard.putNumber("Gyro Proportional", 0.5);
-		SmartDashboard.putNumber("Gyro Integral", 0.0);
-		SmartDashboard.putNumber("Gyro Differential", 2.0);
 		
 		SmartDashboard.putBoolean("Compressor On", false);
 		SmartDashboard.putNumber("Speed Step Drive Train", Robot.DriveTrain.defaultStep);

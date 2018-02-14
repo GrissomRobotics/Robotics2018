@@ -22,10 +22,10 @@ public class Elevator extends PIDSubsystem {
     private final DigitalInput limitSwitchLower = RobotMap.limitSwitchLower;
     
     public Elevator() {
-    	super("Elevator", 0.5,0.0,2.0);
+    	super("Elevator", 0.5, 0, 2.2, 0.25 );
     	setAbsoluteTolerance(100);
     	getPIDController().setContinuous(false);
-    	setOutputRange(-0.8, 0.8);
+    	setOutputRange(-0.6, 0.6);
     	zeroEncoders();
     }
     
@@ -41,7 +41,9 @@ public class Elevator extends PIDSubsystem {
 
     @Override
     public void periodic() {
-    	
+    	SmartDashboard.putNumber("Elevator Encoder", elevatorEncoder.get());
+    	SmartDashboard.putBoolean("Limit Switch Upper", getLimitSwitchUpper());
+    	SmartDashboard.putBoolean("Limit Switch Lower", getLimitSwitchLower());
     }
 
 
@@ -56,7 +58,7 @@ public class Elevator extends PIDSubsystem {
 		//For output, positive is down, negative is up
 		
 		if (output > 0 && limitSwitchLower.get()) {} //If the output is trying to go down, and the lower limit switch is depressed, do not move
-		else if (output < 0 && limitSwitchUpper.get()) {} //If the output is trying to go up, and the upper limit switch is depressed, do not move
+		//else if (output < 0 && limitSwitchUpper.get()) {} //If the output is trying to go up, and the upper limit switch is depressed, do not move
 		else { //If neither of those is true, write the output to the motor
 			elevator.pidWrite(output);
 		}
@@ -79,8 +81,8 @@ public class Elevator extends PIDSubsystem {
 		return limitSwitchLower.get();
 	}
 	
-	public void setPID(double p, double i, double d) {
-		this.getPIDController().setPID(p, i, d);
+	public void setPID(double p, double i, double d, double f) {
+		this.getPIDController().setPID(p, i, d, f);
 	}
 	
 }
