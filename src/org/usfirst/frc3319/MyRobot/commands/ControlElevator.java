@@ -24,7 +24,9 @@ public class ControlElevator extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+    	//This will run any time the elevator is not going to a setpoint, because this is the default command. Therefore:
     	//Set speed to be just enough to keep it in place
+    	//You may be able to configure the feed forward variable to do the same thing, but I am not sure how. This seems like it works fine.
     	Robot.Elevator.setSpeed(-0.125);
     	
     	if (Robot.oi.getPOV()==0) {
@@ -42,7 +44,6 @@ public class ControlElevator extends Command {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-    	
         return false;
     }
 

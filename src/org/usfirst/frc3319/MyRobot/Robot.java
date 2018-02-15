@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
         Robot.DriveTrain.resetGyro();
 
         // Add commands to Autonomous Sendable Chooser
-
+        
         chooser.addDefault("Autonomous Command", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage()));
 
         //SmartDashboard.putData("Auto mode", chooser);

@@ -20,6 +20,8 @@ public class EngageHook extends Command {
     @Override
     protected void initialize() {
     	//TODO make this value whatever the appropriate value is
+    	//Also, I think this will keep that much power going to the speed controller until it is told to do otherwise, but I may be wrong, so this may 
+    	//need to go into the execute method
     	Robot.Climber.engageHook(0.4);
     }
 

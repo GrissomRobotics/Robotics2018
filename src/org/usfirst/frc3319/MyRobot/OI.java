@@ -58,6 +58,9 @@ public class OI {
 	public JoystickButton gripperLower;
 	public JoystickButton engageHook;
 	public JoystickButton engageWinch;
+	public JoystickButton raiseSwitchHeight;
+	public JoystickButton raiseScaleHeight;
+
 		
 	//heights are negative because the up is negative on the elevator
 	public double SWITCH_HEIGHT = -4763;
@@ -72,6 +75,8 @@ public class OI {
 		gripperLower = new JoystickButton(stick, 4);
 		engageHook = new JoystickButton(stick, 1);//A
 		engageWinch = new JoystickButton(stick, 2);//B
+		raiseSwitchHeight = new JoystickButton(stick, 7); //I'm not sure what button this is, change it to be whatever button you want to control it
+		raiseScaleHeight = new JoystickButton(stick, 8);
 		
 
 		
@@ -82,6 +87,11 @@ public class OI {
 		gripperLower.whenPressed(new LowerGripper());
 		engageHook.whileHeld(new EngageHook());
 		engageWinch.whileHeld(new EngageWinch());
+		
+		//Do not make these whileHeld() it will NOT work, because it will repeatedly restart the command, ruining the PID control
+		raiseSwitchHeight.whenPressed(new SetElevatorSetpoint(SWITCH_HEIGHT));
+		raiseScaleHeight.whenPressed(new SetElevatorSetpoint(SCALE_HEIGHT));
+		//You should also probably figure out a button to disable the elevator when pressed, in case of a problem when raising
 		
 
 

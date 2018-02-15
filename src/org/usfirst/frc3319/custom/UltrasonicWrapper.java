@@ -37,6 +37,7 @@ public class UltrasonicWrapper implements PIDSource{
 		usingFront = false;
 	}
 
+	//These methods are not strictly necessary to be filled in. If you want to figure out what to put in it, you can, but I don't think you need to
 	@Override
 	public void setPIDSourceType(PIDSourceType pidSource) {
 	}
