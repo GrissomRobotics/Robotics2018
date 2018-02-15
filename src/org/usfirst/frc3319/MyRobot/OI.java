@@ -56,8 +56,8 @@ public class OI {
 	public JoystickButton gripperOpen;
 	public JoystickButton gripperRaise;
 	public JoystickButton gripperLower;
-	public JoystickButton elevatorLower;
-	public JoystickButton elevatorRaise;
+	public JoystickButton engageHook;
+	public JoystickButton engageWinch;
 		
 	//heights are negative because the up is negative on the elevator
 	public double SWITCH_HEIGHT = -4763;
@@ -70,15 +70,18 @@ public class OI {
 		gripperOpen = new JoystickButton(stick, 5);
 		gripperRaise = new JoystickButton(stick, 3);
 		gripperLower = new JoystickButton(stick, 4);
-		elevatorLower = new JoystickButton(stick, 1);//A
-		elevatorRaise = new JoystickButton(stick, 2);//B
+		engageHook = new JoystickButton(stick, 1);//A
+		engageWinch = new JoystickButton(stick, 2);//B
+		
 
 		
 		
 		gripperClose.whenPressed(new CloseGripper());
 		gripperOpen.whenPressed(new OpenGripper());
 		gripperRaise.whenPressed(new RaiseGripper());
-		gripperLower.whenPressed(new LowerGripper());		
+		gripperLower.whenPressed(new LowerGripper());
+		engageHook.whileHeld(new EngageHook());
+		engageWinch.whileHeld(new EngageWinch());
 		
 
 
@@ -92,7 +95,7 @@ public class OI {
 		SmartDashboard.putData("RaiseSwitchHeight", new SetElevatorSetpoint(SWITCH_HEIGHT));
 		SmartDashboard.putData("RaiseScaleHeight", new SetElevatorSetpoint(SCALE_HEIGHT));
 		SmartDashboard.putData("LowerToDefaultHeight", new SetElevatorSetpoint(0));
-		SmartDashboard.putData("Turn90Degrees", new TurnAngle(90));
+		SmartDashboard.putData("TurnRight90", new TurnAngle(90));
 		SmartDashboard.putData("ZeroGyro", new ZeroGyro());
 		
 		SmartDashboard.putNumber("Elevator Proportional", 0.4);

@@ -3,19 +3,16 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc3319.MyRobot.Robot;
 
 /**
+ * Use this command to drive until a certain reading is reached on the ultrasonic sensor
  * Once you have the UltrasonicWrapper implemented you'll need to add a argument in the constructor
  * that tells the drive train whether to use the front or back sensor. 
  * Write methods there instead of directly manipulating it in this class.
  */
-public class DriveInches extends Command {
-	private double readingTarget;
+public class DriveToInches extends Command {
 	
-    public DriveInches(double inchesToDrive) {
+    public DriveToInches(double ultrasonicTarget) {
     	setInterruptible(true);
-        requires(Robot.DriveTrain);
-        double currentUltraSonicReading = Robot.DriveTrain.getUltraSonicInches();
-        readingTarget = currentUltraSonicReading - inchesToDrive;
-        Robot.DriveTrain.setSetpoint(readingTarget);
+        Robot.DriveTrain.setSetpoint(ultrasonicTarget);
         //Set the gyro controller's setpoint to be whatever the current reading is so that it drives straight
         Robot.DriveTrain.setGyroSetpoint(Robot.DriveTrain.getGyroValue());
     }

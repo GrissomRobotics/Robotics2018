@@ -37,6 +37,7 @@ public class Robot extends TimedRobot {
     public static DriveTrain DriveTrain;
     public static Gripper Gripper;
     public static Elevator Elevator;
+    public static Climber Climber;
 
 
     /**
@@ -49,11 +50,13 @@ public class Robot extends TimedRobot {
         DriveTrain = new DriveTrain();
         Gripper = new Gripper();
         Elevator = new Elevator();
+        Climber = new Climber();
         
         //Send the commands and subsystems to the dashboard
         SmartDashboard.putData(DriveTrain);
         SmartDashboard.putData(Gripper);
         SmartDashboard.putData(Elevator);
+        SmartDashboard.putData(Climber);
         
         SmartDashboard.putData(Scheduler.getInstance());
         

@@ -61,6 +61,8 @@ public class RobotMap {
 	public static DigitalInput limitSwitchLower;
 	public static Adis  gyro;
 	public static PIDController gyroController;
+	public static SpeedController winch;
+	public static SpeedController hook;
 	
 
     public static void init() {
@@ -133,6 +135,13 @@ public class RobotMap {
 		gripDown.set(false);
 		
 		
+		//Note: You may wish to invert these depending on which direction they go
+		winch = new Talon(5);
+		((SendableBase) winch).setName("Climber", "winch");
+		winch.setInverted(false);
 		
+		hook = new Talon(6);
+		((SendableBase) winch).setName("Climber", "hook");
+		hook.setInverted(false);
     }
 }

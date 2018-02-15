@@ -24,7 +24,8 @@ public class ControlElevator extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-    	Robot.Elevator.setSpeed(SmartDashboard.getNumber("Elevator Speed", 0.0));
+    	//Set speed to be just enough to keep it in place
+    	Robot.Elevator.setSpeed(-0.125);
     	
     	if (Robot.oi.getPOV()==0) {
     		//Negative is up
