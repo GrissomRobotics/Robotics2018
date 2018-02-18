@@ -9,11 +9,14 @@ import org.usfirst.frc3319.MyRobot.Robot;
  */
 public class TurnAngle extends Command {
 	//For direction to turn, positive is right, negative is left
+	double setpoint;
 	
-    public TurnAngle(double degreesToTurn) {
+    public TurnAngle(double degreesToTurn, double maxTimeSeconds) {
+    	System.out.println("Turning " + degreesToTurn + " degrees with timeout of " + maxTimeSeconds + " seconds");
         requires(Robot.DriveTrain);
-        double setpoint = Robot.DriveTrain.getGyroValue()+degreesToTurn;
-        Robot.DriveTrain.setGyroSetpoint(setpoint);
+        setpoint = Robot.DriveTrain.getGyroValue() + degreesToTurn;
+        
+        setTimeout(maxTimeSeconds);
     }
 
     // Called just before this Command runs the first time
@@ -30,12 +33,18 @@ public class TurnAngle extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+    	Robot.DriveTrain.setGyroSetpoint(setpoint);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
-        return Robot.DriveTrain.isGyroControllerOnTarget();
+    	if (Robot.DriveTrain.isGyroControllerOnTarget() || isTimedOut()) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
     }
 
     // Called once after isFinished returns true

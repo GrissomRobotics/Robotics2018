@@ -58,15 +58,35 @@ public class OI {
 	public JoystickButton gripperLower;
 	public JoystickButton engageHook;
 	public JoystickButton engageWinch;
-	public JoystickButton raiseSwitchHeight;
-	public JoystickButton raiseScaleHeight;
+	public JoystickButton stopClimber;
 
 		
 	//heights are negative because the up is negative on the elevator
 	public double SWITCH_HEIGHT = -4763;
 	public double SCALE_HEIGHT = -16275;
+	public double DEFAULT_HEIGHT = -1500;
 
     public OI() {
+    	
+    	/*
+    	 * Gripper Controls:
+    	 * 		X:				Raise
+    	 * 		Y:				Lower
+    	 * 		LB:				Release
+    	 * 		RB:				Grab
+    	 * Elevator Controls:
+    	 * 		POV Up:			Go to next setPoint up
+    	 * 		POV Down:		Go to next setPoint down
+    	 * 		Right Stick:	Up/Down manually
+    	 * 		Start:			Abort Movement
+    	 * DriveTrain Controls:
+    	 * 		Left Stick:		Forward/Backward/Left/Right
+    	 * 		LT:				Turn Left
+    	 * 		RT:				Turn Right
+    	 * Climber Controls:
+    	 * 		A:				Engage Hook
+    	 * 		B:				Engage Winch
+    	 */
 
         stick = new Joystick(0);     
 		gripperClose = new JoystickButton(stick, 6);
@@ -75,8 +95,7 @@ public class OI {
 		gripperLower = new JoystickButton(stick, 4);
 		engageHook = new JoystickButton(stick, 1);//A
 		engageWinch = new JoystickButton(stick, 2);//B
-		raiseSwitchHeight = new JoystickButton(stick, 7); //I'm not sure what button this is, change it to be whatever button you want to control it
-		raiseScaleHeight = new JoystickButton(stick, 8);
+		stopClimber = new JoystickButton(stick, 8);//Start Button
 		
 
 		
@@ -87,13 +106,8 @@ public class OI {
 		gripperLower.whenPressed(new LowerGripper());
 		engageHook.whileHeld(new EngageHook());
 		engageWinch.whileHeld(new EngageWinch());
+		stopClimber.whenPressed(new DisableElevator());
 		
-		//Do not make these whileHeld() it will NOT work, because it will repeatedly restart the command, ruining the PID control
-		raiseSwitchHeight.whenPressed(new SetElevatorSetpoint(SWITCH_HEIGHT));
-		raiseScaleHeight.whenPressed(new SetElevatorSetpoint(SCALE_HEIGHT));
-		//You should also probably figure out a button to disable the elevator when pressed, in case of a problem when raising
-		
-
 
         // SmartDashboard Buttons
         SmartDashboard.putData("Autonomous Command", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage()));
@@ -104,8 +118,8 @@ public class OI {
 		SmartDashboard.putData("ZeroEncoders", new ZeroEncoders());
 		SmartDashboard.putData("RaiseSwitchHeight", new SetElevatorSetpoint(SWITCH_HEIGHT));
 		SmartDashboard.putData("RaiseScaleHeight", new SetElevatorSetpoint(SCALE_HEIGHT));
-		SmartDashboard.putData("LowerToDefaultHeight", new SetElevatorSetpoint(0));
-		SmartDashboard.putData("TurnRight90", new TurnAngle(90));
+		SmartDashboard.putData("LowerToDefaultHeight", new SetElevatorSetpoint(DEFAULT_HEIGHT));
+		SmartDashboard.putData("TurnRight90", new TurnAngle(90, 5));
 		SmartDashboard.putData("ZeroGyro", new ZeroGyro());
 		
 		SmartDashboard.putNumber("Elevator Proportional", 0.4);
@@ -133,7 +147,9 @@ public class OI {
     	return stick.getY();
     }
     
-    
+    public double getAxis(int axis) {
+    	return stick.getRawAxis(axis);
+    }
     
     public double getRotationLeft() {
     	return stick.getRawAxis(2);

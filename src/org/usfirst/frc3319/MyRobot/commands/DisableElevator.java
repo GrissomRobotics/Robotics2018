@@ -11,11 +11,12 @@ public class DisableElevator extends Command {
 	public DisableElevator() {
 		requires(Robot.Elevator);
 		setInterruptible(true);
+
+		Robot.Elevator.setSpeed(-0.12);
 	}
 	
 	@Override 
 	protected void initialize() {
-		Robot.Elevator.setSpeed(0);
 	}
 	
 	@Override

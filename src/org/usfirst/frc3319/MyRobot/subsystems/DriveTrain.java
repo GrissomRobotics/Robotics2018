@@ -10,6 +10,7 @@
 
 
 package org.usfirst.frc3319.MyRobot.subsystems;
+import java.util.Arrays;
 
 import org.usfirst.frc3319.MyRobot.Robot;
 import org.usfirst.frc3319.MyRobot.RobotMap;
@@ -18,10 +19,20 @@ import org.usfirst.frc3319.custom.ADIS16448_IMU;
 import org.usfirst.frc3319.custom.Adis;
 import org.usfirst.frc3319.custom.UltrasonicWrapper;
 
+import com.github.cliftonlabs.json_simple.JsonKey;
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsoner;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Spark;
@@ -30,6 +41,7 @@ import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.regex.*;
 
 /**
  *
@@ -40,24 +52,36 @@ public class DriveTrain extends PIDSubsystem {
     private final SpeedController leftRear = RobotMap.driveTrainLeftRear;
     private final SpeedController rightRear = RobotMap.driveTrainRightRear;
     private final MecanumDrive mecanumDrive = RobotMap.driveTrainMecanumDrive;
-    private final Ultrasonic ultraSonic = RobotMap.ultraSonicFront;
+    //private final Ultrasonic ultraSonic = RobotMap.ultraSonicFront;
     private final Adis  gyro = RobotMap.gyro;
     private final PIDController gyroController = RobotMap.gyroController;
-    
+    //private I2C Wire = new I2C(Port.kOnboard,1);
+    private SerialPort arduino = new SerialPort(115200,Port.kUSB1);
+    private final DigitalOutput ultrasoundSelector = RobotMap.ultrasoundSelector;
 	public double defaultStep = 0.025;
+	private long ultrasoundRange = 0;
+	double maxPowerPID = 0.3;
+	double maxPowerGyroPID = 0.5;
+	private int driveTolerance = 2;
+	private int gyroTolerance = 2;
+	public double startTime;
+	public double currentTime;
+	public int maxTime = 5000;
+	private boolean sensor;
     
 	public DriveTrain() {
 		super("Elevator", 0.5,0.0,2.0);
-		setAbsoluteTolerance(0.1); //Set 0.1 inches as the tolerance for purposes of driving
+		setAbsoluteTolerance(driveTolerance); //Set 2 inches as the tolerance for purposes of driving
     	getPIDController().setContinuous(false);
-    	setOutputRange(-1.0, 1.0);
+    	setOutputRange(-maxPowerPID, maxPowerPID);
     	
     	gyroController.setContinuous(false);
-    	gyroController.setOutputRange(-0.6, 0.6); //Set turning speed output to be not more than 40% power
-    	gyroController.setAbsoluteTolerance(2); //Set tolerance on the gyro PID for 2 degrees
+    	gyroController.setOutputRange(-maxPowerGyroPID, maxPowerGyroPID); //Set turning speed output to be not more than 40% power
+    	gyroController.setAbsoluteTolerance(gyroTolerance); //Set tolerance on the gyro PID for 2 degrees
     	
-
+    	setUltrasonicSensor(true);
 	}
+	
 
 
     @Override
@@ -65,12 +89,22 @@ public class DriveTrain extends PIDSubsystem {
         setDefaultCommand(new DriveWithJoystick());
 
     }
-
+    
     @Override
     public void periodic() {
+
+    	//currentTime = System.currentTimeMillis();
+    	readUltrasonicInches();
     	SmartDashboard.putNumber("Robot Heading value", getGyroValue());
     	SmartDashboard.putNumber("Gyro PID power", gyroController.get());
-    	SmartDashboard.putNumber("Ultrasonic reading", getUltraSonicInches());
+    	SmartDashboard.putNumber("Ultrasonic reading", getUltrasonicInches());
+    	/*if (Math.abs(currentTime - startTime) >= maxTime) {
+    		System.out.println("DISABLING");
+    		System.out.println("Start: " + startTime);
+    		System.out.println("End:   " + currentTime);
+    		getPIDController().disable();
+    	}*/
+    	//System.out.println(getUltrasonicInches(true));
     }
     
     public void cartesianDrive(double xValue, double yValue, double rotationValue) {
@@ -86,8 +120,98 @@ public class DriveTrain extends PIDSubsystem {
 
     }
     
-    public double getUltraSonicInches() {
-    	return ultraSonic.getRangeInches();
+    /*
+    public void setUltrasonicSensor(byte[] sensor) {
+    	arduino.write(sensor, 1);
+    }
+    */
+    
+    public void setUltrasonicSensor(boolean front) {
+    	if (front) {
+    		ultrasoundSelector.set(true);
+    		sensor = true;
+    	}
+    	else {
+    		ultrasoundSelector.set(false);
+    		sensor = false;
+    	}
+    }
+    
+    public boolean getUltrasonicSensor() {
+    	return sensor;
+    }
+    
+    public long getUltrasonicInches() {
+    	/*
+    	if (front && currentSensor[0] == 1) {
+    		currentSensor[0] = 2;
+    		setUltrasonicSensor(currentSensor);
+    	}
+    	else if (!front && currentSensor[0] == 2) {
+    		currentSensor[0] = 1;
+    		setUltrasonicSensor(currentSensor);
+    	}
+    	*/
+    	/*
+    	if (front != uxIsFront) {
+	    	byte[] id = {2};
+	    	if (!front) {
+	    		id[0] = 1;
+	    	}
+	    	arduino.write(id, 1);
+	    	uxIsFront = front;
+    	}
+    	*/
+    	return ultrasoundRange;
+    	
+    }
+    
+    public void readUltrasonicInches() {
+    	Pattern p = Pattern.compile("\\{\"d\":\\d*\\}");
+    	String jsonString = arduino.readString();
+    	//System.out.println(jsonString);
+    	JSONParser parser = new JSONParser();
+    	Object jsonObj;
+		Matcher m = p.matcher(jsonString);
+		byte count = 0;
+		while (m.find()) {
+			try {
+				jsonString = m.group(count);
+				jsonObj = parser.parse(jsonString);
+				JSONObject jsonObject = (JSONObject) jsonObj;
+				
+				long dist = (long) jsonObject.get("d");
+				if ((dist > 0) && (dist < 1000)) {
+					ultrasoundRange = dist;
+				}
+				count++;
+			}
+			catch(NullPointerException | ParseException | IllegalStateException | IndexOutOfBoundsException e){
+	    		//System.out.println("Could not read ultrasonic sensor");
+	    		//e.printStackTrace();
+	    		break;
+	    	}
+			
+		}
+    	
+    	
+    	/*
+    	byte[] buff = new byte[21];
+    	Wire.read(2, 21, buff);
+    	System.out.println(Arrays.toString(buff));
+    	String jsonString = new String(buff);//, "UTF-8");
+    	JsonObject deserializedObject = Jsoner.deserialize(jsonString, new JsonObject());
+    	JsonKey key = Jsoner.mintJsonKey("d", 1234);
+    	int distance = 0;
+    	try {
+    		distance = deserializedObject.getInteger(key);
+    		System.out.println(distance);
+    	} catch(NullPointerException e){
+    		System.out.println("Could not read ux");
+    	}
+    	return (double) distance;
+    	*/
+    	
     }
     
     public double getGyroValue() {
@@ -104,7 +228,7 @@ public class DriveTrain extends PIDSubsystem {
 
 	@Override
 	protected double returnPIDInput() {
-		return getUltraSonicInches();
+		return getUltrasonicInches();
 	}
 
 	@Override

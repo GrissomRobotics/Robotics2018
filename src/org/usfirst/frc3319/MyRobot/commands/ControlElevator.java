@@ -10,6 +10,11 @@ import org.usfirst.frc3319.MyRobot.Robot;
 public class ControlElevator extends Command {
 	//TODO Ramp function
 
+	public static int setPoint = -1;	//0 means default, 1 means switch, 2 means scale
+	private static int oldSetPoint = -1;
+	private double[] setPoints = {0, -4763, -16275}; //Default, Switch, Scale. Add more to the list in descending order.
+    private int waiting = 0;
+    private SetElevatorSetpoint set;
     
     public ControlElevator() {
         requires(Robot.Elevator);
@@ -24,20 +29,47 @@ public class ControlElevator extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-    	//This will run any time the elevator is not going to a setpoint, because this is the default command. Therefore:
-    	//Set speed to be just enough to keep it in place
-    	//You may be able to configure the feed forward variable to do the same thing, but I am not sure how. This seems like it works fine.
-    	Robot.Elevator.setSpeed(-0.125);
     	
-    	if (Robot.oi.getPOV()==0) {
-    		//Negative is up
-    		Robot.Elevator.setSpeed(-0.4);
+    	//POV Setting Setpoints
+    	if (Robot.oi.getPOV() == -1.0) {
+       		setPoint += waiting;
+       		waiting = 0;
+       	}
+       	else if(Robot.oi.getPOV() == 0.0 && setPoint < 2) {
+       		waiting = 1;
+       	}
+        else if(Robot.oi.getPOV() == 180.0 && setPoint > 0) {
+        	waiting = -1;
+        }
+        else {
+        	waiting = 0;
+        }
+    	if (setPoint != oldSetPoint) {
+        	set = new SetElevatorSetpoint(setPoints[setPoint]);
+        	set.start();
+        	//System.out.println("Setpoint Set!");
     	}
-    	else if (Robot.oi.getPOV()==180) {
-    		Robot.Elevator.setSpeed(0.4);
+    	oldSetPoint = setPoint;
+    	
+    	//Manual Control with AnalogStick
+    	if (Robot.oi.getAxis(5) > 0.1) {  //down
+    		Robot.Elevator.setSpeed((Robot.oi.getAxis(5)/3)-0.12);
+    	}
+    	else if (Robot.oi.getAxis(5) < 0.1) {  //up
+    		Robot.Elevator.setSpeed((Robot.oi.getAxis(5)/1.5)-0.12);
+    	}
+    	else if (set.isFinished()){
+    		Robot.Elevator.stop();
     	}
     	
-    	SmartDashboard.putNumber("POV", Robot.oi.getPOV());
+    	//Limit Switch Logic
+    	if (Robot.Elevator.getLimitSwitchUpper() && Robot.oi.getAxis(5) < 0.1) {
+    		Robot.Elevator.stop();
+    	}
+    	else if (Robot.Elevator.getLimitSwitchLower() && Robot.oi.getAxis(5) > -0.1) {
+    		Robot.Elevator.off();
+    	}
+    	
     	
     }
 

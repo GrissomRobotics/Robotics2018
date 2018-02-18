@@ -47,4 +47,3 @@ public class Climber extends Subsystem {
 		engageHook(0);
 	}
 }
-

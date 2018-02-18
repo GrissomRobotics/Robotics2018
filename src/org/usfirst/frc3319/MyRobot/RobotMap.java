@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
@@ -54,9 +55,10 @@ public class RobotMap {
 	public static Compressor compressor;
 	public static SpeedController elevator;
 	public static Encoder elevatorEncoder;
-	public static Ultrasonic ultraSonicFront;
-	public static Ultrasonic ultraSonicBack;
+	//public static Ultrasonic ultraSonicFront;
+	//public static Ultrasonic ultraSonicBack;
 	public static UltrasonicWrapper ultraSonic;
+	public static DigitalOutput ultrasoundSelector;
 	public static DigitalInput limitSwitchUpper;
 	public static DigitalInput limitSwitchLower;
 	public static Adis  gyro;
@@ -91,9 +93,9 @@ public class RobotMap {
         driveTrainMecanumDrive.setExpiration(0.1);
         driveTrainMecanumDrive.setMaxOutput(1.0);
                 
-        ultraSonicFront = new Ultrasonic(6, 7);
-        ultraSonicBack = new Ultrasonic(8, 9);
-        ultraSonic = new UltrasonicWrapper(ultraSonicFront, ultraSonicBack);
+        //ultraSonicFront = new Ultrasonic(6, 7);
+        //ultraSonicBack = new Ultrasonic(8, 9);
+        //ultraSonic = new UltrasonicWrapper(ultraSonicFront, ultraSonicBack);
         
         gyro = new Adis();
         ((SendableBase) gyro).setName("DriveTrain","Gyro");
@@ -113,24 +115,26 @@ public class RobotMap {
         
         limitSwitchLower = new DigitalInput(3);
         ((SendableBase) limitSwitchLower).setName("Elevator", "limitSwitchLower");
-                
+        
+        ultrasoundSelector = new DigitalOutput(9);
+        ((SendableBase) ultrasoundSelector).setName("DriveTrain", "ultrasoundSelector");
         
         compressor = new Compressor(0);
         compressor.setClosedLoopControl(true);
 		
-		grab = new Solenoid(0);
+		grab = new Solenoid(4);
 		((SendableBase) grab).setName("Gripper", "grab");
 		grab.set(false);
 		
-		release = new Solenoid(1);
+		release = new Solenoid(5);
 		((SendableBase) release).setName("Gripper", "release");
 		release.set(false);
 		
-		gripUp = new Solenoid(2);
+		gripUp = new Solenoid(6);
 		((SendableBase) gripUp).setName("Gripper", "gripUp");
 		gripUp.set(false);
 		
-		gripDown = new Solenoid(3);
+		gripDown = new Solenoid(7);
 		((SendableBase) gripDown).setName("Gripper", "gripDown");
 		gripDown.set(false);
 		

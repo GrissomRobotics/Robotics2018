@@ -13,6 +13,7 @@ package org.usfirst.frc3319.MyRobot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -38,6 +39,8 @@ public class Robot extends TimedRobot {
     public static Gripper Gripper;
     public static Elevator Elevator;
     public static Climber Climber;
+    
+    //private final Ultrasonic ultraSonic = RobotMap.ultraSonicFront;
 
 
     /**
@@ -112,6 +115,7 @@ public class Robot extends TimedRobot {
         // continue until interrupted by another command, remove
         // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
+        RobotMap.gyroController.disable();
     }
 
     /**
@@ -120,5 +124,8 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+        
+        //System.out.println("test");
+        //System.out.println(ultraSonic.getRangeInches());
     }
 }

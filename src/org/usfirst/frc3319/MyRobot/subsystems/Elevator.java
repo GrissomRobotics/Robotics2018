@@ -1,5 +1,6 @@
 package org.usfirst.frc3319.MyRobot.subsystems;
 
+import org.usfirst.frc3319.MyRobot.Robot;
 import org.usfirst.frc3319.MyRobot.RobotMap;
 import org.usfirst.frc3319.MyRobot.commands.ControlElevator;
 
@@ -68,10 +69,17 @@ public class Elevator extends PIDSubsystem {
 		elevatorEncoder.reset();
 	}
 	
-	public void setSpeed(double speed)
-    {
+	public void setSpeed(double speed) {
     	usePIDOutput(speed);
     }
+	
+	public void stop() {
+		Robot.Elevator.setSpeed(-0.12);
+	}
+	
+	public void off() {
+		Robot.Elevator.setSpeed(0);
+	}
 	
 	public boolean getLimitSwitchUpper() {
 		return limitSwitchUpper.get();
