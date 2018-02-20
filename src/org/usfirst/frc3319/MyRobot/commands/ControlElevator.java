@@ -2,6 +2,7 @@ package org.usfirst.frc3319.MyRobot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.usfirst.frc3319.MyRobot.OI;
 import org.usfirst.frc3319.MyRobot.Robot;
 
 /**
@@ -12,7 +13,7 @@ public class ControlElevator extends Command {
 
 	public static int setPoint = -1;	//0 means default, 1 means switch, 2 means scale
 	private static int oldSetPoint = -1;
-	private double[] setPoints = {0, -4763, -16275}; //Default, Switch, Scale. Add more to the list in descending order.
+	private double[] setPoints = {OI.DEFAULT_HEIGHT, OI.SWITCH_HEIGHT, OI.SCALE_HEIGHT}; //Default, Switch, Scale. Add more to the list in descending order.
     private int waiting = 0;
     private SetElevatorSetpoint set;
     
@@ -29,36 +30,39 @@ public class ControlElevator extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-    	
     	//POV Setting Setpoints
+    	
     	if (Robot.oi.getPOV() == -1.0) {
        		setPoint += waiting;
        		waiting = 0;
        	}
-       	else if(Robot.oi.getPOV() == 0.0 && setPoint < 2) {
-       		waiting = 1;
+    	else if(Robot.oi.getPOV() == 0.0 && setPoint < 2) {
+    		waiting = 1;
        	}
         else if(Robot.oi.getPOV() == 180.0 && setPoint > 0) {
         	waiting = -1;
         }
-        else {
-        	waiting = 0;
-        }
+    	
     	if (setPoint != oldSetPoint) {
         	set = new SetElevatorSetpoint(setPoints[setPoint]);
         	set.start();
-        	//System.out.println("Setpoint Set!");
     	}
+    	
+    		
     	oldSetPoint = setPoint;
+    	Robot.Elevator.enable();
     	
     	//Manual Control with AnalogStick
     	if (Robot.oi.getAxis(5) > 0.1) {  //down
+    		Robot.Elevator.disable();
     		Robot.Elevator.setSpeed((Robot.oi.getAxis(5)/3)-0.12);
     	}
     	else if (Robot.oi.getAxis(5) < 0.1) {  //up
+    		Robot.Elevator.disable();
     		Robot.Elevator.setSpeed((Robot.oi.getAxis(5)/1.5)-0.12);
     	}
     	else if (set.isFinished()){
+    		Robot.Elevator.disable();
     		Robot.Elevator.stop();
     	}
     	

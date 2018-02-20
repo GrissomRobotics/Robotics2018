@@ -59,7 +59,7 @@ public class Elevator extends PIDSubsystem {
 		//For output, positive is down, negative is up
 		
 		if (output > 0 && limitSwitchLower.get()) {} //If the output is trying to go down, and the lower limit switch is depressed, do not move
-		//else if (output < 0 && limitSwitchUpper.get()) {} //If the output is trying to go up, and the upper limit switch is depressed, do not move
+		else if (output < 0 && limitSwitchUpper.get()) {} //If the output is trying to go up, and the upper limit switch is depressed, do not move
 		else { //If neither of those is true, write the output to the motor
 			elevator.pidWrite(output);
 		}
@@ -91,6 +91,10 @@ public class Elevator extends PIDSubsystem {
 	
 	public void setPID(double p, double i, double d, double f) {
 		this.getPIDController().setPID(p, i, d, f);
+	}
+	
+	public double getEncoderValue() {
+		return elevatorEncoder.get();
 	}
 	
 }

@@ -29,6 +29,6 @@ public class AutonomousCommand extends CommandGroup {
     	//Test driveInches() command
     	addSequential(new DriveInches(48, 5, false));
     	addSequential(new TurnAngle(90, 5));
-    	//addSequential(new DriveToInches(6, 5, true));
+    	addSequential(new DriveToInches(6, 5, true));
     }
 }

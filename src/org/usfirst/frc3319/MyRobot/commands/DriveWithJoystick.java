@@ -30,6 +30,7 @@ public class DriveWithJoystick extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+    	Robot.DriveTrain.disableGyroController();
     	//Declare variables for deadzone corrections
     	double turn;
     	double forward;
@@ -47,14 +48,14 @@ public class DriveWithJoystick extends Command {
     	forward = Robot.oi.getYValue();
     	
     	if (Math.abs(turn) > deadThreshold) {
-    		turnSet = rampTurn.ramp(turn);
+    		turnSet = turn;//rampTurn.ramp(turn);
     	}
     	else {
     		turnSet = 0;
     	}
 
     	if (Math.abs(forward) > deadThreshold) {
-    		forwardSet = rampForward.ramp(forward);
+    		forwardSet = forward; //rampForward.ramp(forward);
     	}
     	else {
     		forwardSet = 0;
@@ -62,7 +63,7 @@ public class DriveWithJoystick extends Command {
     	
 
     	if (Math.abs(right) > rightThreshold) {
-    		rightSet = rampRight.ramp(right);
+    		rightSet = right; //rampRight.ramp(right);
     	}
     	else {
     		rightSet = 0;

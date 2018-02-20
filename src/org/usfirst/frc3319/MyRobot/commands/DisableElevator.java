@@ -12,7 +12,7 @@ public class DisableElevator extends Command {
 		requires(Robot.Elevator);
 		setInterruptible(true);
 
-		Robot.Elevator.setSpeed(-0.12);
+		Robot.Elevator.stop();
 	}
 	
 	@Override 
@@ -24,7 +24,7 @@ public class DisableElevator extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return true;
 	}
 	
 	@Override

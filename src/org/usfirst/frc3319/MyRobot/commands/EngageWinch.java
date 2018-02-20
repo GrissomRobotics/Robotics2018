@@ -19,10 +19,7 @@ public class EngageWinch extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-    	//TODO make this value whatever the appropriate value is
-    	//Also, I think this will keep that much power going to the speed controller until it is told to do otherwise, but I may be wrong, so this may 
-    	//need to go into the execute method
-    	Robot.Climber.engageWinch(-0.8);
+    	Robot.Climber.engageWinch(1.0);
     }
 
     // Called repeatedly when this Command is scheduled to run

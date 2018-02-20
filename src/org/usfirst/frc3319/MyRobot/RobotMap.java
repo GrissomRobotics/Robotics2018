@@ -55,9 +55,7 @@ public class RobotMap {
 	public static Compressor compressor;
 	public static SpeedController elevator;
 	public static Encoder elevatorEncoder;
-	//public static Ultrasonic ultraSonicFront;
-	//public static Ultrasonic ultraSonicBack;
-	public static UltrasonicWrapper ultraSonic;
+	public static UltrasonicWrapper ultrasonic;
 	public static DigitalOutput ultrasoundSelector;
 	public static DigitalInput limitSwitchUpper;
 	public static DigitalInput limitSwitchLower;
@@ -65,6 +63,7 @@ public class RobotMap {
 	public static PIDController gyroController;
 	public static SpeedController winch;
 	public static SpeedController hook;
+	public static SerialPort arduino;
 	
 
     public static void init() {
@@ -103,6 +102,11 @@ public class RobotMap {
         gyroController = new PIDController(0.5, 0, 2.0, gyro, new MecanumPIDGyro(driveTrainMecanumDrive));
         ((SendableBase) gyroController).setName("DriveTrain", "gyroController");
         
+        arduino = new SerialPort(115200,Port.kUSB1);
+        ultrasoundSelector = new DigitalOutput(9);
+        
+        ultrasonic = new UltrasonicWrapper(ultrasoundSelector, arduino);
+        
         elevator = new Talon (4);
         ((SendableBase) elevator).setName("Elevator" , "elevator");
         elevator.setInverted(false);
@@ -115,9 +119,6 @@ public class RobotMap {
         
         limitSwitchLower = new DigitalInput(3);
         ((SendableBase) limitSwitchLower).setName("Elevator", "limitSwitchLower");
-        
-        ultrasoundSelector = new DigitalOutput(9);
-        ((SendableBase) ultrasoundSelector).setName("DriveTrain", "ultrasoundSelector");
         
         compressor = new Compressor(0);
         compressor.setClosedLoopControl(true);
@@ -138,14 +139,12 @@ public class RobotMap {
 		((SendableBase) gripDown).setName("Gripper", "gripDown");
 		gripDown.set(false);
 		
-		
-		//Note: You may wish to invert these depending on which direction they go
-		winch = new Talon(5);
+				winch = new Talon(5);
 		((SendableBase) winch).setName("Climber", "winch");
-		winch.setInverted(false);
+		winch.setInverted(true);
 		
 		hook = new Talon(6);
 		((SendableBase) winch).setName("Climber", "hook");
-		hook.setInverted(false);
+		hook.setInverted(true);
     }
 }

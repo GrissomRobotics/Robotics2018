@@ -52,26 +52,29 @@ public class OI {
 
 
     public Joystick stick;
+    public Joystick climberStick;
 	public JoystickButton gripperClose;
 	public JoystickButton gripperOpen;
 	public JoystickButton gripperRaise;
 	public JoystickButton gripperLower;
 	public JoystickButton engageHook;
 	public JoystickButton engageWinch;
-	public JoystickButton stopClimber;
+	public JoystickButton disengageHook;
+	public JoystickButton disengageWinch;
+	public JoystickButton stopElevator;
 
 		
 	//heights are negative because the up is negative on the elevator
-	public double SWITCH_HEIGHT = -4763;
-	public double SCALE_HEIGHT = -16275;
-	public double DEFAULT_HEIGHT = -1500;
+	public static final double SWITCH_HEIGHT = -4763;
+	public static final double SCALE_HEIGHT = -16275;
+	public static final double DEFAULT_HEIGHT = -1500;
 
     public OI() {
     	
     	/*
     	 * Gripper Controls:
-    	 * 		X:				Raise
-    	 * 		Y:				Lower
+    	 * 		X:				Lower
+    	 * 		Y:				Raise
     	 * 		LB:				Release
     	 * 		RB:				Grab
     	 * Elevator Controls:
@@ -84,18 +87,24 @@ public class OI {
     	 * 		LT:				Turn Left
     	 * 		RT:				Turn Right
     	 * Climber Controls:
-    	 * 		A:				Engage Hook
-    	 * 		B:				Engage Winch
+    	 * 		A:				Engage Winch
+    	 * 		B:				Disengage Winch
+    	 *      Y: Engage Hook
+    	 *      X: Disengage Hook
     	 */
 
-        stick = new Joystick(0);     
-		gripperClose = new JoystickButton(stick, 6);
-		gripperOpen = new JoystickButton(stick, 5);
-		gripperRaise = new JoystickButton(stick, 3);
-		gripperLower = new JoystickButton(stick, 4);
-		engageHook = new JoystickButton(stick, 1);//A
-		engageWinch = new JoystickButton(stick, 2);//B
-		stopClimber = new JoystickButton(stick, 8);//Start Button
+        stick = new Joystick(0);
+        climberStick = new Joystick(1);
+		gripperClose = new JoystickButton(stick, 3);
+		gripperOpen = new JoystickButton(stick, 4);
+		gripperRaise = new JoystickButton(stick, 2);
+		gripperLower = new JoystickButton(stick, 1);
+		stopElevator = new JoystickButton(stick, 8);//Start Button
+		
+		engageWinch = new JoystickButton(climberStick, 1);//A
+		disengageWinch = new JoystickButton(climberStick, 2); //B
+		disengageHook = new JoystickButton(climberStick, 3);
+		engageHook = new JoystickButton(climberStick, 4);
 		
 
 		
@@ -105,8 +114,10 @@ public class OI {
 		gripperRaise.whenPressed(new RaiseGripper());
 		gripperLower.whenPressed(new LowerGripper());
 		engageHook.whileHeld(new EngageHook());
+		disengageHook.whileHeld(new DisengageHook());
+		disengageWinch.whileHeld(new DisengageWinch());
 		engageWinch.whileHeld(new EngageWinch());
-		stopClimber.whenPressed(new DisableElevator());
+		stopElevator.whenPressed(new DisableElevator());
 		
 
         // SmartDashboard Buttons
@@ -120,12 +131,16 @@ public class OI {
 		SmartDashboard.putData("RaiseScaleHeight", new SetElevatorSetpoint(SCALE_HEIGHT));
 		SmartDashboard.putData("LowerToDefaultHeight", new SetElevatorSetpoint(DEFAULT_HEIGHT));
 		SmartDashboard.putData("TurnRight90", new TurnAngle(90, 5));
+		SmartDashboard.putData("TurnLeft90", new TurnAngle(-90,5));
 		SmartDashboard.putData("ZeroGyro", new ZeroGyro());
+		SmartDashboard.putData("SetFrontUltrasonic", new SetUltrasonicSensor(true));
+		SmartDashboard.putData("SetBackUltrasonic", new SetUltrasonicSensor(false));
+		SmartDashboard.putData("Drive To 10 Inches", new DriveToInches(10, 5, true));
+
 		
-		SmartDashboard.putNumber("Elevator Proportional", 0.4);
-		SmartDashboard.putNumber("Elevator Integral", 0.0);
-		SmartDashboard.putNumber("Elevator Differential", 0.75);
-		SmartDashboard.putNumber("Elevator Feed Forward", -0.125);
+		SmartDashboard.putNumber("Drive Proportional", 0.4);
+		SmartDashboard.putNumber("Drive Integral", 0.0);
+		SmartDashboard.putNumber("Drive Differential", 0.75);
 		
 		
 		SmartDashboard.putBoolean("Compressor On", false);
@@ -162,6 +177,7 @@ public class OI {
     public int getPOV() {
     	return stick.getPOV();
     }
+    
 
 }
 

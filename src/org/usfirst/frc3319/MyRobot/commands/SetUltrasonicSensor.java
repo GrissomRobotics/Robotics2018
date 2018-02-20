@@ -5,18 +5,20 @@ import org.usfirst.frc3319.MyRobot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class SetUltrasonicSensor extends Command {
-	private boolean front2;
+	
+	private boolean usingFront;
+	
 	public SetUltrasonicSensor(boolean front) {
 		
-		front2 = front;
+		usingFront = front;
 	}
 	@Override
 	protected void execute() {
-		Robot.DriveTrain.setUltrasonicSensor(front2);
+		Robot.DriveTrain.setUltrasonicSensor(usingFront);
 	}
 	@Override
 	protected boolean isFinished() {
-		if (Robot.DriveTrain.getUltrasonicSensor() == front2) {
+		if (Robot.DriveTrain.getUltrasonicSensor() == usingFront) {
 			return true;
 		}
 		else {

@@ -32,7 +32,7 @@ public class SetElevatorSetpoint extends Command {
     		Robot.Elevator.setPID(0.46, 0.0, 0.75, -0.12);
     		System.out.println("Going up");
     	} else { //Going down
-    		Robot.Elevator.setPID(SmartDashboard.getNumber("Elevator Proportional", 0.46), SmartDashboard.getNumber("Elevator Integral", 0.0), SmartDashboard.getNumber("Elevator Differential", 0.75), SmartDashboard.getNumber("Elevator Feed Forward", -0.12));
+    		Robot.Elevator.setPID(0.46, 0.0, 0.75, -0.12);
     		System.out.println("Going down");
     	}
     	

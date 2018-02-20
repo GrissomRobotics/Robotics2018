@@ -17,12 +17,13 @@ public class TurnAngle extends Command {
         setpoint = Robot.DriveTrain.getGyroValue() + degreesToTurn;
         
         setTimeout(maxTimeSeconds);
+        Robot.DriveTrain.resetGyro();
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-    	Robot.DriveTrain.setGyroPID(SmartDashboard.getNumber("Gyro Proportional", 0.5), SmartDashboard.getNumber("Gyro Integral", 0.0), SmartDashboard.getNumber("Gyro Differential", 2.0));
+    	Robot.DriveTrain.setGyroPID(0.6,0.0,2.0);
 
     	
     	//Stop the drive train first, in case the motors are still on (they shouldn't be), then enable the gyro controller to turn
@@ -40,6 +41,9 @@ public class TurnAngle extends Command {
     @Override
     protected boolean isFinished() {
     	if (Robot.DriveTrain.isGyroControllerOnTarget() || isTimedOut()) {
+    		Robot.DriveTrain.disableGyroController();
+        	Robot.DriveTrain.resetGyro();
+        	Robot.DriveTrain.setGyroSetpoint(0);
     		return true;
     	}
     	else {
@@ -50,7 +54,6 @@ public class TurnAngle extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
-    	Robot.DriveTrain.disableGyroController();
     }
 
     // Called when another command which requires one or more of the same
@@ -58,5 +61,8 @@ public class TurnAngle extends Command {
     @Override
     protected void interrupted() {
     	Robot.DriveTrain.disableGyroController();
+    	Robot.DriveTrain.resetGyro();
+    	Robot.DriveTrain.setGyroSetpoint(0);
+
     }
 }
