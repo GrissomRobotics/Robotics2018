@@ -53,13 +53,13 @@ public class ControlElevator extends Command {
     	Robot.Elevator.enable();
     	
     	//Manual Control with AnalogStick
-    	if (Robot.oi.getAxis(5) > 0.1) {  //down
+    	if (Robot.oi.getElevatorPower() > 0.1) {  //down
     		Robot.Elevator.disable();
-    		Robot.Elevator.setSpeed((Robot.oi.getAxis(5)/3)-0.12);
+    		Robot.Elevator.setSpeed((Robot.oi.getElevatorPower()/2.5)-0.12);
     	}
-    	else if (Robot.oi.getAxis(5) < 0.1) {  //up
+    	else if (Robot.oi.getElevatorPower() < 0.1) {  //up
     		Robot.Elevator.disable();
-    		Robot.Elevator.setSpeed((Robot.oi.getAxis(5)/1.5)-0.12);
+    		Robot.Elevator.setSpeed((Robot.oi.getElevatorPower()-0.12));
     	}
     	else if (set.isFinished()){
     		Robot.Elevator.disable();
@@ -67,10 +67,10 @@ public class ControlElevator extends Command {
     	}
     	
     	//Limit Switch Logic
-    	if (Robot.Elevator.getLimitSwitchUpper() && Robot.oi.getAxis(5) < 0.1) {
+    	if (Robot.Elevator.getLimitSwitchUpper() && Robot.oi.getElevatorPower() < 0.1) {
     		Robot.Elevator.stop();
     	}
-    	else if (Robot.Elevator.getLimitSwitchLower() && Robot.oi.getAxis(5) > -0.1) {
+    	else if (Robot.Elevator.getLimitSwitchLower() && Robot.oi.getElevatorPower() > -0.1) {
     		Robot.Elevator.off();
     	}
     	

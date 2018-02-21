@@ -71,6 +71,15 @@ public class OI {
 
     public OI() {
     	
+    	/**
+    	 *  1s: 25 in
+			2s: 63 in
+			3s: 106 in
+			4s: 142 in
+
+    	 * 
+    	 * /
+    	
     	/*
     	 * Gripper Controls:
     	 * 		X:				Lower
@@ -121,7 +130,6 @@ public class OI {
 		
 
         // SmartDashboard Buttons
-        SmartDashboard.putData("Autonomous Command", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage()));
 		SmartDashboard.putData("CloseGripper", new CloseGripper());
 		SmartDashboard.putData("OpenGripper", new OpenGripper());
 		SmartDashboard.putData("RaiseGripper", new RaiseGripper());
@@ -135,8 +143,14 @@ public class OI {
 		SmartDashboard.putData("ZeroGyro", new ZeroGyro());
 		SmartDashboard.putData("SetFrontUltrasonic", new SetUltrasonicSensor(true));
 		SmartDashboard.putData("SetBackUltrasonic", new SetUltrasonicSensor(false));
-		SmartDashboard.putData("Drive To 24 Inches", new DriveToInches(24, 5, true));
-		SmartDashboard.putData("Drive 10 Inches", new DriveInches(10, 5, true));
+		SmartDashboard.putData("Drive To 24 Inches", new DriveToInches(24, 5, false));
+		SmartDashboard.putData("Drive 10 Inches", new DriveInches(10, 5, false));
+		
+		SmartDashboard.putData("Drive 1 Seconds", new DriveByTime(1));
+		SmartDashboard.putData("Drive 2 Seconds", new DriveByTime(2));
+		SmartDashboard.putData("Drive 3 Seconds", new DriveByTime(3));
+		SmartDashboard.putData("Drive 4 Seconds", new DriveByTime(4));
+		SmartDashboard.putData("Drive 5 Seconds", new DriveByTime(5));
 
 
 		
@@ -160,8 +174,8 @@ public class OI {
     	return driveStick.getY();
     }
     
-    public double getAxis(int axis) {
-    	return otherStick.getRawAxis(axis);
+    public double getElevatorPower() {
+    	return otherStick.getRawAxis(1);
     }
     
     public double getRotationLeft() {
