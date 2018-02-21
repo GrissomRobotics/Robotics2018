@@ -55,18 +55,18 @@ public class DriveTrain extends PIDSubsystem {
     private final Adis  gyro = RobotMap.gyro;
     protected final PIDController gyroController = RobotMap.gyroController;
     private UltrasonicWrapper ultrasonic = RobotMap.ultrasonic;
-	public double defaultStep = 0.025;
-	double maxPowerPID = 0.6;
-	double maxPowerGyroPID = 0.5;
-	private int driveTolerance = 2;
+	public double defaultStep = 0.03;
+	double maxPowerPID = 0.4;
+	double maxPowerGyroPID = 0.4;
+	private int driveTolerance = 10;
 	private int gyroTolerance = 2;
 	public double startTime;
 	public double currentTime;
 	public int maxTime = 5000;
     
 	public DriveTrain() {
-		super("DriveTrain", 0.5,0.0,2.0);
-		setAbsoluteTolerance(driveTolerance); //Set 2 inches as the tolerance for purposes of driving
+		super("DriveTrain", 0.7,0.0,2.3);
+		setPercentTolerance(driveTolerance); //Set 10% as the tolerance for purposes of driving
     	getPIDController().setContinuous(false);
     	setOutputRange(-maxPowerPID, maxPowerPID);
     	
@@ -139,10 +139,17 @@ public class DriveTrain extends PIDSubsystem {
 	@Override
 	protected void usePIDOutput(double output) {
 		if (ultrasonic.getUltrasonicSensor()) {
-			mecanumDrive.driveCartesian(0, output,0);//gyroController.get());
+			if (ultrasonic.getUltraSonic() < getPIDController().getSetpoint()) {
+				mecanumDrive.driveCartesian(0, -output,0);
+			} else {
+				mecanumDrive.driveCartesian(0, output, 0);
+			}
 		} else {
-			mecanumDrive.driveCartesian(0, -output, 0);//gyroController.get());
-		}
+			if (ultrasonic.getUltraSonic() < getPIDController().getSetpoint()) {
+				mecanumDrive.driveCartesian(0, -output,0);
+			} else {
+				mecanumDrive.driveCartesian(0, output, 0);
+			}		}
 	}
 	
 	public void setGyroSetpoint(double setpoint) {

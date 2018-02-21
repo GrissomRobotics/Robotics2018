@@ -15,6 +15,7 @@ public class SetUltrasonicSensor extends Command {
 	@Override
 	protected void execute() {
 		Robot.DriveTrain.setUltrasonicSensor(usingFront);
+		System.out.println("Set Ultrasonic Sensor!");
 	}
 	@Override
 	protected boolean isFinished() {

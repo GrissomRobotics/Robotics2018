@@ -41,9 +41,7 @@ public class TurnAngle extends Command {
     @Override
     protected boolean isFinished() {
     	if (Robot.DriveTrain.isGyroControllerOnTarget() || isTimedOut()) {
-    		Robot.DriveTrain.disableGyroController();
-        	Robot.DriveTrain.resetGyro();
-        	Robot.DriveTrain.setGyroSetpoint(0);
+    		System.out.println("TurnAngle Finished");
     		return true;
     	}
     	else {
@@ -54,6 +52,9 @@ public class TurnAngle extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
+    	Robot.DriveTrain.disableGyroController();
+    	Robot.DriveTrain.resetGyro();
+    	Robot.DriveTrain.setGyroSetpoint(0);
     }
 
     // Called when another command which requires one or more of the same

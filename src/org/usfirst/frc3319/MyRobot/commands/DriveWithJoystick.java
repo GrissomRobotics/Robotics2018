@@ -22,9 +22,9 @@ public class DriveWithJoystick extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-    	rampForward = new Ramper(SmartDashboard.getNumber("Speed Step Drive Train", Robot.DriveTrain.defaultStep)); 
-    	rampRight = new Ramper(SmartDashboard.getNumber("Speed Step Drive Train", Robot.DriveTrain.defaultStep)); 
-    	rampTurn = new Ramper(SmartDashboard.getNumber("Speed Step Drive Train", Robot.DriveTrain.defaultStep));
+    	rampForward = new Ramper(Robot.DriveTrain.defaultStep); 
+    	rampRight = new Ramper(Robot.DriveTrain.defaultStep); 
+    	rampTurn = new Ramper(Robot.DriveTrain.defaultStep);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -48,14 +48,14 @@ public class DriveWithJoystick extends Command {
     	forward = Robot.oi.getYValue();
     	
     	if (Math.abs(turn) > deadThreshold) {
-    		turnSet = turn;//rampTurn.ramp(turn);
+    		turnSet = turn;
     	}
     	else {
     		turnSet = 0;
     	}
 
     	if (Math.abs(forward) > deadThreshold) {
-    		forwardSet = forward; //rampForward.ramp(forward);
+    		forwardSet = rampForward.ramp(forward);
     	}
     	else {
     		forwardSet = 0;
@@ -63,7 +63,7 @@ public class DriveWithJoystick extends Command {
     	
 
     	if (Math.abs(right) > rightThreshold) {
-    		rightSet = right; //rampRight.ramp(right);
+    		rightSet = rampRight.ramp(right);
     	}
     	else {
     		rightSet = 0;

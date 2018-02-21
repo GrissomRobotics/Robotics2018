@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Ultrasonic;
 
-//Wrapper class for the configuration with 2 ultrasonic sensors, one at the front, and one at the back
+//Wrapper class for the configuration with 2 ultrasonic sensors, one at the front, and one at the back, using an arduino
 
 public class UltrasonicWrapper implements PIDSource{
 	

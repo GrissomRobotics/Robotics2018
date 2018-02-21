@@ -17,18 +17,7 @@ public class DriveToInches extends Command {
     	usingFront = front;
     	ultrasoundTarget = ultrasonicTarget;
     	setInterruptible(true);
-    	Robot.DriveTrain.setUltrasonicSensor(usingFront);
-        //Robot.DriveTrain.getPIDController().setPID(SmartDashboard.getNumber("Drive Proportional", 0.5), SmartDashboard.getNumber("Drive Integral", 0.0), SmartDashboard.getNumber("Drive Differential", 2.0));
-    	if (ultrasonicTarget < 0) {
-    		throw new java.lang.Error("NegativeDistanceError");
-    	}
-    	if (front) {
-    		System.out.println("Driving until wall is " + ultrasonicTarget + " inches from front sensor");
-    	}
-    	else {
-    		System.out.println("Driving until wall is " + ultrasonicTarget + " inches from rear sensor");
-    	}
-        
+        requires(Robot.DriveTrain);
         setTimeout(maxTimeSeconds);
 
         //Set the gyro controller's setpoint to be whatever the current reading is so that it drives straight
@@ -37,12 +26,11 @@ public class DriveToInches extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+    	Robot.DriveTrain.getPIDController().setPID(SmartDashboard.getNumber("Drive Proportional", 0.5), SmartDashboard.getNumber("Drive Integral", 0.0), SmartDashboard.getNumber("Drive Differential", 2.0));
     	//Reset the ultraSonic sensor in case some other command has used it since instantiation of the class
     	Robot.DriveTrain.setUltrasonicSensor(usingFront);
-    	Robot.DriveTrain.setSetpoint(ultrasoundTarget);
     	Robot.DriveTrain.enable();
-    	Robot.DriveTrain.setGyroSetpoint(Robot.DriveTrain.getGyroValue());
-    	System.out.println("Initialize in DriveToInches gyro setpoint: "+ Robot.DriveTrain.getGyroSetpoint());
+    	Robot.DriveTrain.setSetpoint(ultrasoundTarget);
     	System.out.println("Ultrasonic target: " + Robot.DriveTrain.getSetpoint());
     	
     }
@@ -57,8 +45,16 @@ public class DriveToInches extends Command {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
+    	if (Robot.DriveTrain.getUltrasonicInches() > Robot.DriveTrain.getSetpoint() && !usingFront) {
+    		System.out.println("DriveInches Finished");
+       		return true;
+    	} else if (Robot.DriveTrain.getUltrasonicInches() < Robot.DriveTrain.getSetpoint() && usingFront) {
+    		System.out.println("DriveInches Finished");
+    		return true;
+    	}
+    	
     	if (Robot.DriveTrain.onTarget() || isTimedOut()) {
-    		Robot.DriveTrain.stop();
+    		System.out.println("DriveToInches Finished");
     		return true;
     	}
     	else {
@@ -69,6 +65,7 @@ public class DriveToInches extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
+		Robot.DriveTrain.stop();
     }
 
     // Called when another command which requires one or more of the same

@@ -12,53 +12,53 @@ public class DriveInches extends Command {
 
 	private double readingTarget;
 	private boolean usingFront;
+	private double inchesToDrive;
 	
     public DriveInches(double inchesToDrive, double maxTimeSeconds, boolean usingFront) {
     	this.usingFront = usingFront;
     	System.out.println("new DriveInches(" + inchesToDrive + ", " + maxTimeSeconds + ", " + usingFront + ")");
     	setInterruptible(true);
         requires(Robot.DriveTrain);
-        //Robot.DriveTrain.getPIDController().setPID(SmartDashboard.getNumber("Drive Proportional", 0.5), SmartDashboard.getNumber("Drive Integral", 0.0), SmartDashboard.getNumber("Drive Differential", 2.0));
-    	Robot.DriveTrain.setUltrasonicSensor(usingFront);
-        double currentUltraSonicReading = (double) Robot.DriveTrain.getUltrasonicInches();
-        if (inchesToDrive > 0) {
-        	System.out.println("InchesToDrive > 0");
-        	if (usingFront) {
-        		System.out.println("Using Front Sensor");
-        		readingTarget = currentUltraSonicReading - inchesToDrive;
-        	}
-        	else {
-        		System.out.println("Using Rear Sensor");
-        		readingTarget = currentUltraSonicReading + inchesToDrive;
-        	}
-        }
-        else {
-        	System.out.println("InchesToDrive <= 0");
-        	if (usingFront) {
-        		System.out.println("Using Front Sensor");
-        		readingTarget = currentUltraSonicReading + inchesToDrive;
-        	}
-        	else {
-        		System.out.println("Using Rear Sensor");
-        		readingTarget = currentUltraSonicReading - inchesToDrive;
-        	}
-        }
-        if (readingTarget < 0) {
-        	throw new java.lang.Error("NEGATIVE READING TARGET");
-        }
-        
+        this.inchesToDrive = inchesToDrive;
         setTimeout(maxTimeSeconds);
     }
 
     // Called just before this Command runs the first time
     @Override
-    protected void initialize() {
+    protected void initialize() { 
+    	Robot.DriveTrain.getPIDController().setPID(SmartDashboard.getNumber("Drive Proportional", 0.5), SmartDashboard.getNumber("Drive Integral", 0.0), SmartDashboard.getNumber("Drive Differential", 2.0));
     	//Reset the ultraSonic sensor in case some other command has used it since instantiation of the class
     	Robot.DriveTrain.setUltrasonicSensor(usingFront);
-    	Robot.DriveTrain.enable();
-    	Robot.DriveTrain.resetGyro();
+        double currentUltraSonicReading = (double) Robot.DriveTrain.getUltrasonicInches();
+        if (inchesToDrive > 0) {
+        	System.out.println("InchesToDrive > 0");
+        	if (usingFront) {
+        		readingTarget = currentUltraSonicReading - inchesToDrive;
+        		System.out.println("Using Front Sensor to Drive " + readingTarget);
+
+        	}
+        	else {
+        		readingTarget = currentUltraSonicReading + inchesToDrive;
+        		System.out.println("Using Rear Sensor to Drive " + readingTarget);
+        	}
+        }
+        else {
+        	System.out.println("InchesToDrive <= 0");
+        	if (usingFront) {
+        		readingTarget = currentUltraSonicReading + inchesToDrive;
+        		System.out.println("Using Front Sensor to Drive " + readingTarget);
+        	}
+        	else {
+        		readingTarget = currentUltraSonicReading - inchesToDrive;
+        		System.out.println("Using Rear Sensor to Drive " + readingTarget);
+
+        	}
+        }
+        if (readingTarget < 0) {
+        	throw new java.lang.Error("NEGATIVE READING TARGET");
+        }
+        Robot.DriveTrain.enable();
     	Robot.DriveTrain.setSetpoint(readingTarget);
-        Robot.DriveTrain.setGyroSetpoint(Robot.DriveTrain.getGyroValue());
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -69,8 +69,16 @@ public class DriveInches extends Command {
     // Make this return true when this Command no longer needs to run execute()
     @Override
     protected boolean isFinished() {
+    	if (Robot.DriveTrain.getUltrasonicInches() > Robot.DriveTrain.getSetpoint() && !usingFront) {
+    		System.out.println("DriveInches Finished");
+       		return true;
+    	} else if (Robot.DriveTrain.getUltrasonicInches() < Robot.DriveTrain.getSetpoint() && usingFront) {
+    		System.out.println("DriveInches Finished");
+    		return true;
+    	}
+    	
     	if (Robot.DriveTrain.onTarget() || isTimedOut()) {
-    		Robot.DriveTrain.stop();
+    		System.out.println("DriveInches Finished");
     		return true;
     	} else {
     		return false;
@@ -80,6 +88,7 @@ public class DriveInches extends Command {
     // Called once after isFinished returns true
     @Override
     protected void end() {
+		Robot.DriveTrain.stop();
     }
 
     // Called when another command which requires one or more of the same

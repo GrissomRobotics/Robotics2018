@@ -42,7 +42,7 @@ public class Gripper extends Subsystem {
     	grab.set(false);
     	gripUp.set(false);
     	gripDown.set(false);
-    	if(SmartDashboard.getBoolean("Compressor On", false)) {
+    	if(SmartDashboard.getBoolean("Compressor On", true)) {
     		compressor.start();
     	} else {
     		compressor.stop();

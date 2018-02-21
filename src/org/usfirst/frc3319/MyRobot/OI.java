@@ -24,11 +24,11 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 public class OI {
     //// CREATING BUTTONS
-    // One type of button is a joystick button which is any button on a joystick.
-    // You create one by telling it which joystick it's on and which button
+    // One type of button is a joydriveStick button which is any button on a joydriveStick.
+    // You create one by telling it which joydriveStick it's on and which button
     // number it is.
-    // Joystick stick = new Joystick(port);
-    // Button button = new JoystickButton(stick, buttonNumber);
+    // JoydriveStick driveStick = new JoydriveStick(port);
+    // Button button = new JoydriveStickButton(driveStick, buttonNumber);
 
     // There are a few additional built in buttons you can use. Additionally,
     // by subclassing Button you can create custom triggers and bind those to
@@ -51,8 +51,8 @@ public class OI {
     // button.whenReleased(new ExampleCommand());
 
 
-    public Joystick stick;
-    public Joystick climberStick;
+    public Joystick driveStick;
+    public Joystick otherStick;
 	public JoystickButton gripperClose;
 	public JoystickButton gripperOpen;
 	public JoystickButton gripperRaise;
@@ -80,10 +80,10 @@ public class OI {
     	 * Elevator Controls:
     	 * 		POV Up:			Go to next setPoint up
     	 * 		POV Down:		Go to next setPoint down
-    	 * 		Right Stick:	Up/Down manually
+    	 * 		Right driveStick:	Up/Down manually
     	 * 		Start:			Abort Movement
     	 * DriveTrain Controls:
-    	 * 		Left Stick:		Forward/Backward/Left/Right
+    	 * 		Left driveStick:		Forward/Backward/Left/Right
     	 * 		LT:				Turn Left
     	 * 		RT:				Turn Right
     	 * Climber Controls:
@@ -93,18 +93,18 @@ public class OI {
     	 *      X: Disengage Hook
     	 */
 
-        stick = new Joystick(0);
-        climberStick = new Joystick(1);
-		gripperClose = new JoystickButton(stick, 3);
-		gripperOpen = new JoystickButton(stick, 4);
-		gripperRaise = new JoystickButton(stick, 2);
-		gripperLower = new JoystickButton(stick, 1);
-		stopElevator = new JoystickButton(stick, 8);//Start Button
+        driveStick = new Joystick(0);
+        otherStick = new Joystick(1);
+		gripperClose = new JoystickButton(otherStick, 3);
+		gripperOpen = new JoystickButton(otherStick, 4);
+		gripperRaise = new JoystickButton(otherStick, 5);
+		gripperLower = new JoystickButton(otherStick, 6);
+		stopElevator = new JoystickButton(otherStick, 8);//Start Button
 		
-		engageWinch = new JoystickButton(climberStick, 1);//A
-		disengageWinch = new JoystickButton(climberStick, 2); //B
-		disengageHook = new JoystickButton(climberStick, 3);
-		engageHook = new JoystickButton(climberStick, 4);
+		engageWinch = new JoystickButton(driveStick, 2);//A
+		disengageWinch = new JoystickButton(driveStick, 1); //B
+		disengageHook = new JoystickButton(driveStick, 3);
+		engageHook = new JoystickButton(driveStick, 4);
 		
 
 		
@@ -135,7 +135,9 @@ public class OI {
 		SmartDashboard.putData("ZeroGyro", new ZeroGyro());
 		SmartDashboard.putData("SetFrontUltrasonic", new SetUltrasonicSensor(true));
 		SmartDashboard.putData("SetBackUltrasonic", new SetUltrasonicSensor(false));
-		SmartDashboard.putData("Drive To 10 Inches", new DriveToInches(10, 5, true));
+		SmartDashboard.putData("Drive To 24 Inches", new DriveToInches(24, 5, true));
+		SmartDashboard.putData("Drive 10 Inches", new DriveInches(10, 5, true));
+
 
 		
 		SmartDashboard.putNumber("Drive Proportional", 0.4);
@@ -143,39 +145,35 @@ public class OI {
 		SmartDashboard.putNumber("Drive Differential", 0.75);
 		
 		
-		SmartDashboard.putBoolean("Compressor On", false);
+		SmartDashboard.putBoolean("Compressor On", true);
 		SmartDashboard.putNumber("Speed Step Drive Train", Robot.DriveTrain.defaultStep);
 		
 		SmartDashboard.putNumber("Elevator Speed", 0);
 		
     }
-
-    public Joystick getstick() {
-        return stick;
-    }
     
     public double getXValue() {
-    	return stick.getX();
+    	return driveStick.getX();
     }
     
     public double getYValue() {
-    	return stick.getY();
+    	return driveStick.getY();
     }
     
     public double getAxis(int axis) {
-    	return stick.getRawAxis(axis);
+    	return otherStick.getRawAxis(axis);
     }
     
     public double getRotationLeft() {
-    	return stick.getRawAxis(2);
+    	return driveStick.getRawAxis(2);
     }
     
     public double getRotationRight() {
-    	return stick.getRawAxis(3);
+    	return driveStick.getRawAxis(3);
     }
     
     public int getPOV() {
-    	return stick.getPOV();
+    	return otherStick.getPOV();
     }
     
 
