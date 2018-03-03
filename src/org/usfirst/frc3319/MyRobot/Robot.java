@@ -74,10 +74,15 @@ public class Robot extends TimedRobot {
 
         // Add commands to Autonomous Sendable Chooser
         
-        chooser.addDefault("Autonomous Command Right", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), 'R'));
-        chooser.addObject("Autonomous Command Center", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), 'C'));
-        chooser.addObject("Autonomous Command Left", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), 'L'));
-        chooser.addObject("Go forward by time", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), 'E'));
+        chooser.addDefault("Autonomous Command Outer Right", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), 1));
+        chooser.addObject("Autonomous Command Center", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), 3));
+        chooser.addObject("Autonomous Command Outer Left", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), 2));
+        chooser.addObject("Autonomous Command Inner Right", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), 4));
+        chooser.addObject("Autonomous Command Inner Left", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), 5));
+        
+        //The scale autonomous command just goes forward a greater distance
+        chooser.addObject("Autonomous Command Scale", new AutonomousCommandScale(DriverStation.getInstance().getGameSpecificMessage()));
+        
 
 
         SmartDashboard.putData("Auto mode", chooser);

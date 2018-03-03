@@ -9,11 +9,16 @@ import org.usfirst.frc3319.MyRobot.Robot;
  * If the input is negative, use the front ultrasonic sensor and drive backwards
  */
 public class DriveByTime extends Command {
-    public DriveByTime(double seconds) {
+	private boolean forward;
+	
+    public DriveByTime(double distance) {
+    	if (distance > 0) {
+    		forward = true;
+    	} else {
+    		forward = false;
+    	}
     	requires(Robot.DriveTrain);
-    	
-    	//Drive forward for 8 seconds
-    	this.setTimeout(seconds);
+    	this.setTimeout(calculateTime(distance));
     }
 
     // Called just before this Command runs the first time
@@ -24,7 +29,11 @@ public class DriveByTime extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-    	Robot.DriveTrain.cartesianDrive(0, -0.3, 0);
+    	if (forward) {
+    		Robot.DriveTrain.cartesianDrive(0, -0.3, 0);
+    	} else {
+    		Robot.DriveTrain.cartesianDrive(0, 0.3, 0);
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -45,4 +54,8 @@ public class DriveByTime extends Command {
     protected void interrupted() {
     	Robot.DriveTrain.stop();
     }
+    
+	static double calculateTime(double distance) {
+		return (0.000008122 * (Math.pow(distance,2))) + (0.024 * distance) + 0.411;
+	}
 }
