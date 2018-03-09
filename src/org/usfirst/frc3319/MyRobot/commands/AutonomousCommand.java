@@ -76,10 +76,13 @@ public class AutonomousCommand extends CommandGroup {
     }
     
     private void depositAndBackAway() {
-    	//If this method does not work, copy it and replace every occurence of it with this
+    	//If this method does not work, copy it and replace every occurrence of it with this
+    	//Wait after using the pneumatics to give it time to complete the command
     	addSequential(new SetElevatorSetpoint(OI.SWITCH_HEIGHT));
 		addSequential(new LowerGripper());
+		addSequential(new Wait(0.5));
 		addSequential(new OpenGripper());
+		addSequential(new Wait(0.5));
 		addSequential(new RaiseGripper());
 		addSequential(new DriveByTime(-12));
 		addSequential(new SetElevatorSetpoint(OI.DEFAULT_HEIGHT));
