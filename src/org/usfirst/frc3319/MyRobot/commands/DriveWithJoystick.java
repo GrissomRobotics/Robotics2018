@@ -11,7 +11,6 @@ import org.usfirst.frc3319.custom.Ramper;
 public class DriveWithJoystick extends Command {
 	private Ramper rampForward;
 	private Ramper rampRight;
-	private Ramper rampTurn;
 	
 
     public DriveWithJoystick() {
@@ -24,7 +23,6 @@ public class DriveWithJoystick extends Command {
     protected void initialize() {
     	rampForward = new Ramper(Robot.DriveTrain.defaultStep); 
     	rampRight = new Ramper(Robot.DriveTrain.defaultStep); 
-    	rampTurn = new Ramper(Robot.DriveTrain.defaultStep);
     }
 
     // Called repeatedly when this Command is scheduled to run

@@ -21,13 +21,15 @@ import org.usfirst.frc3319.MyRobot.subsystems.*;
 public class Robot extends TimedRobot {
 
     Command autonomousCommand;
-    SendableChooser<CommandGroup> chooser = new SendableChooser<>();
+    SendableChooser<Integer> chooser = new SendableChooser<>();
 
     public static OI oi;
     public static DriveTrain DriveTrain;
     public static Gripper Gripper;
     public static Elevator Elevator;
     public static Climber Climber;
+    
+    public String gameSpecificData;
     
     //private final Ultrasonic ultraSonic = RobotMap.ultraSonicFront;
 
@@ -63,14 +65,14 @@ public class Robot extends TimedRobot {
 
         // Add commands to Autonomous Sendable Chooser
         
-        chooser.addDefault("Autonomous Command Outer Right", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), 1));
-        chooser.addObject("Autonomous Command Center", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), 3));
-        chooser.addObject("Autonomous Command Outer Left", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), 2));
-        chooser.addObject("Autonomous Command Inner Right", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), 4));
-        chooser.addObject("Autonomous Command Inner Left", new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), 5));
+        chooser.addDefault("Autonomous Command Outer Right", 1);
+        chooser.addObject("Autonomous Command Center", 3);
+        chooser.addObject("Autonomous Command Outer Left", 2);
+        chooser.addObject("Autonomous Command Inner Right",4);
+        chooser.addObject("Autonomous Command Inner Left", 5);
         
         //The scale autonomous command just goes forward a greater distance
-        chooser.addObject("Autonomous Command Scale", new AutonomousCommandScale(DriverStation.getInstance().getGameSpecificMessage()));
+        chooser.addObject("Autonomous Command Scale", 6);
         
 
 
@@ -91,10 +93,13 @@ public class Robot extends TimedRobot {
         Scheduler.getInstance().run();
     }
 
-    @Override
+    @Override        
     public void autonomousInit() {
+        if (chooser.getSelected() == null) {} //Shouldn't happen, this would happen in the event that SmartDashboard was not initialized
+        else { //we received a request from dashboard, now create the command to match
+            autonomousCommand = new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), (int) chooser.getSelected());
+        }
     	DriveTrain.resetGyro();
-        autonomousCommand = chooser.getSelected();
         // schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.start();
     }
