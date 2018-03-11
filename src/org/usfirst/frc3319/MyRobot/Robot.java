@@ -97,7 +97,11 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         if (chooser.getSelected() == null) {} //Shouldn't happen, this would happen in the event that SmartDashboard was not initialized
         else { //we received a request from dashboard, now create the command to match
+<<<<<<< HEAD
             autonomousCommand = new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), (int) chooser.getSelected());
+=======
+            autonomousCommand = new AutonomousCommand(DriverStation.getInstance().getGameSpecificMessage(), (int) chooser.getSelected())
+>>>>>>> 7031d98bb2437153c3f905e9cf8e9de2e4e181d4
         }
     	DriveTrain.resetGyro();
         // schedule the autonomous command (example)
