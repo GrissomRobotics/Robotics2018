@@ -56,6 +56,7 @@ public class DriveByTime extends Command {
     }
     
 	static double calculateTime(double distance) {
+		//If we change wheels, multiply the result by 4/3
 		return (0.000008122 * (Math.pow(distance,2))) + (0.024 * distance) + 0.411;
 	}
 }

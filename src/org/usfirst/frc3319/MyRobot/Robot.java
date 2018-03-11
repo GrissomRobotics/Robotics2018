@@ -1,5 +1,6 @@
 package org.usfirst.frc3319.MyRobot;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Ultrasonic;
@@ -53,6 +54,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData(Climber);
         
         SmartDashboard.putData(Scheduler.getInstance());
+        CameraServer.getInstance().startAutomaticCapture();
         
 
         // OI must be constructed after subsystems. If the OI creates Commands

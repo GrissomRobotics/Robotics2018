@@ -22,7 +22,7 @@ public class AutonomousCommand extends CommandGroup {
     				System.out.println("GameSpecificData is R");
     				addSequential(new DriveByTime(startingDistance));
     				//addSequential(new DriveInches(startingDistance, 7, false));
-    				addSequential(new TurnAngle(-90, 3));
+    				addSequential(new TurnAngle(90, 3));
     				addSequential(new DriveByTime(45));
     				//addSequential(new DriveInches(45, 5, false);
     				depositAndBackAway();
@@ -36,7 +36,7 @@ public class AutonomousCommand extends CommandGroup {
     			if (gameSpecificData.charAt(0) == 'L') { //The first character represents which side our color of the switch is on
     				System.out.println("GameSpecificData is L");
     				addSequential(new DriveByTime(startingDistance));
-    				addSequential(new TurnAngle(90, 3));
+    				addSequential(new TurnAngle(-90, 3));
     				addSequential(new DriveByTime(45));
    					depositAndBackAway();
     			} else if (gameSpecificData.charAt(0) == 'R') {
