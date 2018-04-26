@@ -11,14 +11,26 @@ import org.usfirst.frc3319.MyRobot.Robot;
 public class DriveByTime extends Command {
 	private boolean forward;
 	
-    public DriveByTime(double distance) {
-    	if (distance > 0) {
+	public DriveByTime(double distance) {
+		if (distance > 0) {
     		forward = true;
     	} else {
     		forward = false;
     	}
     	requires(Robot.DriveTrain);
     	this.setTimeout(calculateTime(distance));
+	}
+	
+    public DriveByTime(double time, boolean useTime) {
+    	if (time > 0) {
+    		forward = true;
+    	} else {
+    		forward = false;
+    	}
+    	requires(Robot.DriveTrain);
+    	if (useTime) {
+    		this.setTimeout(time);
+    	} 
     }
 
     // Called just before this Command runs the first time
@@ -57,6 +69,6 @@ public class DriveByTime extends Command {
     
 	static double calculateTime(double distance) {
 		//If we change wheels, multiply the result by 4/3
-		return (0.000008122 * (Math.pow(distance,2))) + (0.024 * distance) + 0.411;
+		return (4.0/3.0)*((0.000008122 * (Math.pow(distance,2))) + (0.024 * distance) + 0.411);
 	}
 }

@@ -40,7 +40,12 @@ public class DriveWithJoystick extends Command {
     	double deadThreshold = 0.1;
     	
     	//Correct deadzones
-    	//Logic is: if the reading is greater than the threshold, make the setter equal to it, otherwise, make the setter equal to 0
+    	//Logic is: if the r		
+    		
+    	
+    	
+    	
+    	//reading is greater than the threshold, make the setter equal to it, otherwise, make the setter equal to 0
     	turn = Robot.oi.getRotationLeft()-Robot.oi.getRotationRight();
     	right = Robot.oi.getXValue();
     	forward = Robot.oi.getYValue();
@@ -67,12 +72,16 @@ public class DriveWithJoystick extends Command {
     		rightSet = 0;
     	}
     	
-    	Robot.DriveTrain.cartesianDrive(rightSet, forwardSet, turnSet);
+    	Robot.DriveTrain.cartesianDrive(rightSet, forwardSet, (turnSet*0.6));
        	}
     
 
     // Make this return true when this Command no longer needs to run execute()
-    @Override
+    @Override	
+    
+    
+    	
+    	
     protected boolean isFinished() {
         return false;
     }

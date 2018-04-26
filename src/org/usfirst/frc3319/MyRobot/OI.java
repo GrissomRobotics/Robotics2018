@@ -62,12 +62,15 @@ public class OI {
 	public JoystickButton disengageHook;
 	public JoystickButton disengageWinch;
 	public JoystickButton stopElevator;
+	public JoystickButton servoState;
 
 		
 	//heights are negative because the up is negative on the elevator
-	public static final double SWITCH_HEIGHT = -4763;
+	public static final double SWITCH_HEIGHT = -6000;
 	public static final double SCALE_HEIGHT = -16275;
 	public static final double DEFAULT_HEIGHT = -1500;
+	
+	//private static final double otherSensitivity = 10; //inverse scale, lower is more sensitive
 
     public OI() {
     	
@@ -104,18 +107,17 @@ public class OI {
 
         driveStick = new Joystick(0);
         otherStick = new Joystick(1);
-		gripperClose = new JoystickButton(otherStick, 3);
-		gripperOpen = new JoystickButton(otherStick, 4);
-		gripperRaise = new JoystickButton(otherStick, 5);
-		gripperLower = new JoystickButton(otherStick, 6);
+		gripperClose = new JoystickButton(otherStick, 4);
+		gripperOpen = new JoystickButton(otherStick, 3);
+		gripperRaise = new JoystickButton(otherStick, 6);
+		gripperLower = new JoystickButton(otherStick, 5);
 		stopElevator = new JoystickButton(otherStick, 8);//Start Button
 		
 		engageWinch = new JoystickButton(driveStick, 2);//A
 		disengageWinch = new JoystickButton(driveStick, 1); //B
 		disengageHook = new JoystickButton(driveStick, 3);
 		engageHook = new JoystickButton(driveStick, 4);
-		
-
+		servoState = new JoystickButton(driveStick, 6);
 		
 		
 		gripperClose.whenPressed(new CloseGripper());
@@ -127,51 +129,26 @@ public class OI {
 		disengageWinch.whileHeld(new DisengageWinch());
 		engageWinch.whileHeld(new EngageWinch());
 		stopElevator.whenPressed(new DisableElevator());
+		servoState.whenPressed(new ChangeServoState());
 		
-
-        // SmartDashboard Buttons
-		SmartDashboard.putData("CloseGripper", new CloseGripper());
-		SmartDashboard.putData("OpenGripper", new OpenGripper());
-		SmartDashboard.putData("RaiseGripper", new RaiseGripper());
-		SmartDashboard.putData("LowerGripper", new LowerGripper());
-		SmartDashboard.putData("ZeroEncoders", new ZeroEncoders());
-		SmartDashboard.putData("RaiseSwitchHeight", new SetElevatorSetpoint(SWITCH_HEIGHT));
-		SmartDashboard.putData("RaiseScaleHeight", new SetElevatorSetpoint(SCALE_HEIGHT));
-		SmartDashboard.putData("LowerToDefaultHeight", new SetElevatorSetpoint(DEFAULT_HEIGHT));
-		SmartDashboard.putData("TurnRight90", new TurnAngle(90, 5));
-		SmartDashboard.putData("TurnLeft90", new TurnAngle(-90,5));
 		SmartDashboard.putData("ZeroGyro", new ZeroGyro());
-		SmartDashboard.putData("SetFrontUltrasonic", new SetUltrasonicSensor(true));
-		SmartDashboard.putData("SetBackUltrasonic", new SetUltrasonicSensor(false));
-		SmartDashboard.putData("Drive To 24 Inches", new DriveToInches(24, 5, false));
-		SmartDashboard.putData("Drive 10 Inches", new DriveInches(10, 5, false));
-		
-		SmartDashboard.putData("Drive 1 Seconds", new DriveByTime(1));
-		SmartDashboard.putData("Drive 2 Seconds", new DriveByTime(2));
-		SmartDashboard.putData("Drive 3 Seconds", new DriveByTime(3));
-		SmartDashboard.putData("Drive 4 Seconds", new DriveByTime(4));
-		SmartDashboard.putData("Drive 5 Seconds", new DriveByTime(5));
+		SmartDashboard.putData("Drive 1 Seconds", new DriveByTime(1, true));
+		SmartDashboard.putData("Drive 2 Seconds", new DriveByTime(2, true));
+		SmartDashboard.putData("Drive 3 Seconds", new DriveByTime(3, true));
+		SmartDashboard.putData("Drive 4 Seconds", new DriveByTime(4, true));
+		SmartDashboard.putData("Drive 5 Seconds", new DriveByTime(5, true));
+		SmartDashboard.putData("Drive 6 Seconds", new DriveByTime(6, true));
 
-
-		
-		SmartDashboard.putNumber("Drive Proportional", 0.4);
-		SmartDashboard.putNumber("Drive Integral", 0.0);
-		SmartDashboard.putNumber("Drive Differential", 0.75);
-		
-		
 		SmartDashboard.putBoolean("Compressor On", true);
-		SmartDashboard.putNumber("Speed Step Drive Train", Robot.DriveTrain.defaultStep);
-		
-		SmartDashboard.putNumber("Elevator Speed", 0);
-		
+		SmartDashboard.putNumber("Speed Step Drive Train", Robot.DriveTrain.defaultStep);		
     }
     
     public double getXValue() {
-    	return driveStick.getX();
+    	return driveStick.getX();// + (otherStick.getRawAxis(4)/otherSensitivity);
     }
     
     public double getYValue() {
-    	return driveStick.getY();
+    	return driveStick.getY();// + (otherStick.getRawAxis(5)/otherSensitivity);
     }
     
     public double getElevatorPower() {
@@ -179,11 +156,11 @@ public class OI {
     }
     
     public double getRotationLeft() {
-    	return driveStick.getRawAxis(2);
+    	return driveStick.getRawAxis(2);// + (otherStick.getRawAxis(2)/otherSensitivity);
     }
     
     public double getRotationRight() {
-    	return driveStick.getRawAxis(3);
+    	return driveStick.getRawAxis(3);// + (otherStick.getRawAxis(3)/otherSensitivity);
     }
     
     public int getPOV() {

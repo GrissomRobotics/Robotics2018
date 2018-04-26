@@ -29,11 +29,6 @@ public class Robot extends TimedRobot {
     public static Gripper Gripper;
     public static Elevator Elevator;
     public static Climber Climber;
-    
-    public String gameSpecificData;
-    
-    //private final Ultrasonic ultraSonic = RobotMap.ultraSonicFront;
-
 
     /**
      * This function is run when the robot is first started up and should be

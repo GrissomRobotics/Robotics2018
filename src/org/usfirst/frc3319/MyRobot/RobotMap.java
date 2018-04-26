@@ -24,9 +24,11 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SendableBase;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.SerialPort.Port;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
@@ -59,11 +61,12 @@ public class RobotMap {
 	public static DigitalOutput ultrasoundSelector;
 	public static DigitalInput limitSwitchUpper;
 	public static DigitalInput limitSwitchLower;
-	public static Adis  gyro;
+	public static Adis gyro;
 	public static PIDController gyroController;
 	public static SpeedController winch;
 	public static SpeedController hook;
 	public static SerialPort arduino;
+	public static Servo servo;
 	
 
     public static void init() {
@@ -96,8 +99,9 @@ public class RobotMap {
         //ultraSonicBack = new Ultrasonic(8, 9);
         //ultraSonic = new UltrasonicWrapper(ultraSonicFront, ultraSonicBack);
         
+        
         gyro = new Adis();
-        ((SendableBase) gyro).setName("DriveTrain","Gyro");
+         ((SendableBase) gyro).setName("DriveTrain","Gyro");
         
         gyroController = new PIDController(0.5, 0, 2.0, gyro, new MecanumPIDGyro(driveTrainMecanumDrive));
         ((SendableBase) gyroController).setName("DriveTrain", "gyroController");
@@ -123,28 +127,34 @@ public class RobotMap {
         compressor = new Compressor(0);
         compressor.setClosedLoopControl(true);
 		
-		grab = new Solenoid(4);
+		grab = new Solenoid(5);
 		((SendableBase) grab).setName("Gripper", "grab");
 		grab.set(false);
 		
-		release = new Solenoid(5);
+		release = new Solenoid(4);
 		((SendableBase) release).setName("Gripper", "release");
 		release.set(false);
 		
-		gripUp = new Solenoid(6);
+		gripUp = new Solenoid(7);
 		((SendableBase) gripUp).setName("Gripper", "gripUp");
 		gripUp.set(false);
 		
-		gripDown = new Solenoid(7);
+		gripDown = new Solenoid(6);
 		((SendableBase) gripDown).setName("Gripper", "gripDown");
 		gripDown.set(false);
 		
-				winch = new Talon(5);
+		winch = new Talon(5);
 		((SendableBase) winch).setName("Climber", "winch");
 		winch.setInverted(true);
 		
 		hook = new Talon(6);
 		((SendableBase) winch).setName("Climber", "hook");
 		hook.setInverted(true);
+		
+		/*
+		servo = new Servo(7);
+		((SendableBase) servo).setName("Climber", "servo");
+		servo.set(0.0);
+		*/
     }
 }

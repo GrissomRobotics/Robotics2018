@@ -55,7 +55,7 @@ public class DriveTrain extends PIDSubsystem {
     private final Adis  gyro = RobotMap.gyro;
     protected final PIDController gyroController = RobotMap.gyroController;
     private UltrasonicWrapper ultrasonic = RobotMap.ultrasonic;
-	public double defaultStep = 0.03;
+	public final double defaultStep = 0.03;
 	double maxPowerPID = 0.4;
 	double maxPowerGyroPID = 0.4;
 	private int driveTolerance = 10;
@@ -120,7 +120,8 @@ public class DriveTrain extends PIDSubsystem {
     }
     
     public double getGyroValue() {
-    	return gyro.getRobotHeading();
+    	//return gyro.getRobotHeading();
+    	return gyro.getAngle();
     }
     
     public void resetGyro() {
@@ -149,7 +150,8 @@ public class DriveTrain extends PIDSubsystem {
 				mecanumDrive.driveCartesian(0, -output,0);
 			} else {
 				mecanumDrive.driveCartesian(0, output, 0);
-			}		}
+			}		
+		}
 	}
 	
 	public void setGyroSetpoint(double setpoint) {
